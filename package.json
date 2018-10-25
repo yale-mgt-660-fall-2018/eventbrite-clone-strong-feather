@@ -1,0 +1,44 @@
+{
+    "name": "social-todo-koa-postgres-starter",
+    "version": "1.0.0",
+    "description": "Starter code for CPSC213/MGT659 social todo homework",
+    "main": "start.js",
+    "engines": {
+        "node": ">=8.0"
+    },
+    "engineStrict": true,
+    "scripts": {
+        "test": "jest --forceExit",
+        "dev": "nodemon ./start.js",
+        "start": "node ./start.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/yale-cpsc-213/social-todo-koa-postgres-starter.git"
+    },
+    "author": "Kyle Jensen and Annie Chen",
+    "license": "Unlicense",
+    "bugs": {
+        "url": "https://github.com/yale-cpsc-213/social-todo-koa-postgres-starter/issues"
+    },
+    "homepage": "https://github.com/yale-cpsc-213/social-todo-koa-postgres-starter#readme",
+    "devDependencies": {
+        "eslint": "^5.7.0",
+        "eslint-config-airbnb-base": "^13.1.0",
+        "eslint-plugin-import": "^2.14.0",
+        "jest": "^23.6.0",
+        "js-beautify": "^1.8.8",
+        "nodemon": "^1.18.4"
+    },
+    "dependencies": {
+        "koa": "^2.6.1",
+        "koa-bodyparser": "^4.2.1",
+        "koa-passport": "^4.1.1",
+        "koa-router": "^7.4.0",
+        "koa-session": "^5.9.0",
+        "koa-views": "^6.1.4",
+        "pg-promise": "^8.5.1",
+        "validator": "^10.8.0",
+        "supertest": "^3.3.0"
+    }
+}
