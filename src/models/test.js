@@ -316,7 +316,7 @@ describe('tasks', async () => {
             .toBe(false);
     });
 
-    test.only('can be created with collaborators', async () => {
+    test('can be created with collaborators', async () => {
         const u0 = dbusers[0];
         const u1 = dbusers[1];
         const t = demoTasks[0];
@@ -341,7 +341,7 @@ describe('tasks', async () => {
     });
 
 
-    test.only('cannot be created with invalid collaborators', async () => {
+    test('cannot be created with invalid collaborators', async () => {
         const u0 = dbusers[0];
         const u1 = dbusers[1];
         const t = demoTasks[0];
@@ -358,7 +358,7 @@ describe('tasks', async () => {
             .toBe(0);
     });
 
-    test.only('can be created with empty collaborators', async () => {
+    test('can be created with empty collaborators', async () => {
         const u0 = dbusers[0];
         const t = demoTasks[0];
         let error = null;
