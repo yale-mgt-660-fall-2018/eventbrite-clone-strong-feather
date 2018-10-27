@@ -194,6 +194,7 @@ and that I want to give you at the very start of your project.
   app should try to store data in the database (like a new event)
   and then check for errors returned by the database, rather than 
   checking for data integrity and then sending it to the database.
+  You can use `try` and `catch` as shown in the `models/test.js` file.
 * Make your controllers/handlers "skinny". Make your models "fat". Keep logic
   out of the controller and move it to the model-related code. E.g.
   if your controller needs to create a new event or RSVP a person
