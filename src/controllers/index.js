@@ -4,7 +4,8 @@
  */
 async function index(ctx) {
     const template = 'index.njk';
-    return ctx.render(template);
+    const waysOfBeingAwesome = ['awesome1', 'awesome2', 'awesome3'];
+    return ctx.render(template, { waysOfBeingAwesome });
 }
 
 module.exports = {
