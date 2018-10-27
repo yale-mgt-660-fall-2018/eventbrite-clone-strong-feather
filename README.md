@@ -82,10 +82,12 @@ those.
 To run the application, do something like the following.
 
 ```
-SECRET=foo DATABASE_URL=postgres://postgres@localhost/postgres npm run dev
+DATABASE_URL=postgres://dev_user:dev_pass@localhost/dev_db npm run dev
 ```
 
-In production, you can use the `npm start` command instead.
+In production, you can use the `npm start` command instead. And, you'll 
+need to set your `DATABASE_URL` environment variable using a manner appropriate
+for your hosting provider, e.g. `heroku config` if you're running on Heroku.
 
 Before running the application in production, you'll need to create the schema
 in your Postgres database. You'll do that using *something* like
@@ -104,60 +106,53 @@ If you create a test database (careful not to overwrite your production database
 run tests and should see output as such.
 
 ```
-$ SECRET=foo TEST_DATABASE_URL=postgres://testing_user:testing_pass@localhost:6000/testing_db npm test
+$ TEST_DATABASE_URL=postgres://testing_user:testing_pass@localhost:6000/testing_db npm test
 
-> Evenbrite-clone-koa-postgres-starter@1.0.0 test /Users/kljensen/src/yale-cpsc-213/Evenbrite-clone-koa-postgres-completed
-> jest --forceExit
+> project-starter-koa-postgres@1.0.0 test /Users/kljensen/src/github.com/yale-mgt-660-fall-2018/project-starter-koa-postgres
+> jest --forceExit --detectOpenHandles --verbose --no-cache
 
- PASS  models/test.js
-  users
-    ✓ can be inserted (18ms)
-    ✓ have their email address coverted to lowercase (9ms)
-    ✓ cannot have the same email address (19ms)
-    ✓ cannot have names longer than 50 characters (10ms)
-    ✓ can be found when correct password is provided by not with incorrect (22ms)
-  tasks
-    ✓ can be inserted (28ms)
-    ✓ can be retrieved by user id (19ms)
-    ✓ can only be deleted by the owner (19ms)
-    ✓ can be shared with other users (19ms)
-    ✓ can be toggled complete only by owner and collaborators (23ms)
+ PASS  src/models/test.js
+  events
+    ✓ can be inserted (25ms)
+    ✓ cannot have names longer than 50 characters (12ms)
 
-Test Suites: 1 passed, 1 total
-Tests:       10 passed, 10 total
+ PASS  src/app.test.js
+  our app
+    ✓ root route is up (658ms)
+
+Test Suites: 2 passed, 2 total
+Tests:       3 passed, 3 total
 Snapshots:   0 total
-Time:        1.254s
+Time:        3.736s
 Ran all test suites.
+
 ```
+
+You should write more tests. They are helpful!
 
 ## File structure
 
 ```
 .
-+-- README.md
-├── package-lock.json
-├── package.json
+├── README.md - This file
+├── package-lock.json - Locked down dependency tree
+├── package.json - Defined of dependencies and scripts
 ├── src
-│   ├── app.js - Where the application is defined
-│   ├── app.test.js - Tests for the application
-│   ├── config.js - Config for the app, fetched from environment
-│   ├── controllers - All controllers
-│   │   ├── index.js
-│   │   ├── tasks.js
-│   │   └── users.js
-│   ├── models - All models
-│   │   ├── init.js
-│   │   ├── schema.sql
-│   │   ├── tasks.js
-│   │   ├── test.js
-│   │   └── users.js
-│   ├── routes - All routes
-│   │   └── routes.js
-│   ├── services - Misc things that don't fit into models
-│   │   └── middleware.js
-│   └── views - All views
-│       └── index.hbs
-└── start.js - Script that starts the app (the server)
+│   ├── app.js - Main app defined here
+│   ├── app.test.js - Simple tests of the app; you should make more
+│   ├── config.js - Configuration, reads environment variables mostly
+│   ├── controllers- Controllers/handlers, these handle requests
+│   │   └── index.js 
+│   ├── models - Models, code that talks to the database
+│   │   ├── events.js - Functions for getting events in and out of db
+│   │   ├── init.js - Code for initializing db
+│   │   ├── schema.sql - SQL schema
+│   │   └── test.js - Tests of functions for talking to db; write more!
+│   ├── routes
+│   │   └── routes.js - Our routes---maps URLs to controllers/handlers
+│   └── views
+│       └── index.njk - Our views---the HTML we render
+└── start.js - Script that starts the app
 ```
 
 ## Sage counsel
