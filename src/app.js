@@ -40,7 +40,7 @@ function createApp(config) {
 
     // Add view/template engine
     app.use(views(path.join(__dirname, 'views'), {
-        map: { hbs: 'handlebars' },
+        map: { hbs: 'handlebars', njk: 'nunjucks' },
     }));
 
     // Attach our routes.
