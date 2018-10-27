@@ -8,7 +8,7 @@
     },
     "engineStrict": true,
     "scripts": {
-        "test": "jest --forceExit --detectOpenHandles --verbose",
+        "test": "jest --forceExit --detectOpenHandles --verbose --no-cache",
         "dev": "nodemon ./start.js",
         "start": "node ./start.js"
     },
@@ -31,6 +31,7 @@
         "nodemon": "^1.18.4"
     },
     "dependencies": {
+        "bluebird": "^3.5.2",
         "koa": "^2.6.1",
         "koa-bodyparser": "^4.2.1",
         "koa-passport": "^4.1.1",
@@ -38,6 +39,7 @@
         "koa-session": "^5.9.0",
         "koa-views": "^6.1.4",
         "nunjucks": "^3.1.3",
+        "pg-native": "^3.0.0",
         "pg-promise": "^8.5.1",
         "supertest": "^3.3.0",
         "validator": "^10.8.0"

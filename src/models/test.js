@@ -1,47 +1,50 @@
 /* global beforeAll, test, expect, describe, beforeEach */
-const pgp = require('pg-promise')();
-const users = require('./users.js');
-const tasks = require('./tasks.js');
-
-let db;
+const bluebird = require('bluebird');
+const pgp = require('pg-promise')({ promiseLib: bluebird });
+const events = require('./events.js');
 const init = require('./init.js');
 
-const demoUsers = [
+let db;
+
+const demoEvents = [
     {
-        name: 'Lauren Blake',
-        email: 'lauren@foo.com',
-        password: 'foo',
+        title: 'SOM House Party',
+        // Note that JavaScript months are zero-indexed,
+        // so, month zero is January. This is Jan 17th
+        // 2018 at 4:30pm local time.
+        date: new Date(2018, 0, 17, 16, 30, 0),
+        imageURL: 'http://i.imgur.com/pXjrQ.gif',
+        location: 'Kyle \'s house',
+        attending: ['kyle.jensen@yale.edu', 'kim.kardashian@yale.edu'],
     },
     {
-        name: 'Joe Carlson',
-        email: 'joe@foo.com',
-        password: 'foo',
+        title: 'BBQ party for hackers and nerds',
+        date: new Date(2017, 8, 1, 19, 0, 0),
+        imageURL: 'http://i.imgur.com/7pe2k.gif',
+        location: 'Sharon Oster\'s house',
+        attending: ['kyle.jensen@yale.edu', 'kim.kardashian@yale.edu'],
     },
     {
-        name: 'Kathryn Muller',
-        email: 'kathryn@bar.edu',
-        password: 'foo',
+        title: 'BBQ for managers',
+        date: new Date(2017, 12, 20, 18, 0, 0),
+        imageURL: 'http://i.imgur.com/CJLrRqh.gif',
+        location: 'Barry Nalebuff\'s house',
+        attending: ['kim.kardashian@yale.edu'],
+    },
+    {
+        title: 'Cooking lessons for the busy business student',
+        date: new Date(2018, 3, 2, 19, 0, 0),
+        imageURL: 'http://i.imgur.com/02KT9.gif',
+        location: 'Yale Farm',
+        attending: ['homer.simpson@yale.edu'],
     },
 ];
 
-const demoTasks = [
-    {
-        name: 'Get milk',
-        description: 'From Costco',
-    },
-    {
-        name: 'Get bread',
-        description: 'From Stop and Shop',
-    },
-    {
-        name: 'Get beer',
-        description: 'From the Wine Thief',
-    },
-];
 
-// Create a new schema with a random name
-// prior to running tests.
 beforeAll(async () => {
+    // Check to make sure the user supplied the
+    // TEST_DATABASE_URL environment variable so
+    // that we know how to connect to the database!
     const databaseURL = process.env.TEST_DATABASE_URL;
     if (!databaseURL) {
         throw new Error('You must supply a TEST_DATABASE_URL');
@@ -54,322 +57,48 @@ beforeAll(async () => {
     }
 });
 
-beforeEach(async () => db.any('TRUNCATE users_tasks, tasks, users CASCADE'));
+// Delete all rows from these tables before starting each set of tests
+beforeEach(async () => db.any('TRUNCATE events CASCADE'));
 
-describe('users', async () => {
-    let firstUserDB;
-    const firstUser = demoUsers[0];
-
+describe('events', async () => {
     test('can be inserted', async () => {
+        let firstEventSaved;
+        let numEvents;
         let error = null;
-        let numUsers = 0;
         try {
-            firstUserDB = await users.insert(
+            firstEventSaved = await events.insert(
                 db,
-                firstUser.name,
-                firstUser.email.toUpperCase(),
-                firstUser.password,
+                demoEvents[0].title,
+                demoEvents[0].date,
+                demoEvents[0].imageURL,
+                demoEvents[0].location,
             );
-            numUsers = await users.count(db);
+            numEvents = await events.count(db);
         } catch (e) {
             error = e;
         }
         expect(error)
             .toBe(null);
-        expect(numUsers)
+        expect(firstEventSaved.title)
+            .toBe(demoEvents[0].title);
+        expect(numEvents)
             .toBe(1);
-    });
-
-    test('have their email address coverted to lowercase', async () => {
-        expect(firstUserDB.email)
-            .toBe(firstUser.email.toLowerCase());
-    });
-
-    test('cannot have the same email address', async () => {
-        let error = null;
-        try {
-            await users.insert(
-                db,
-                firstUser.name,
-                firstUser.email,
-                firstUser.password,
-            );
-            await users.insert(
-                db,
-                firstUser.name,
-                firstUser.email,
-                firstUser.password,
-            );
-        } catch (e) {
-            error = e;
-        }
-        expect(error)
-            .not.toBeNull();
     });
 
     test('cannot have names longer than 50 characters', async () => {
         let error = null;
         try {
-            firstUserDB = await users.insert(
+            await events.insert(
                 db,
                 'x'.repeat(51),
-                firstUser.email.toUpperCase(),
-                firstUser.password,
+                demoEvents[0].date,
+                demoEvents[0].imageURL,
+                demoEvents[0].location,
             );
         } catch (e) {
             error = e;
         }
         expect(error)
             .not.toBeNull();
-    });
-
-    test('can be found when correct password is provided by not with incorrect', async () => {
-        let error = null;
-        const user = demoUsers[0];
-        let dbuser1;
-        let dbuser2;
-        try {
-            await users.insert(db, user.name, user.email, user.password);
-            dbuser1 = await users.getByCredentials(db, user.email, user.password);
-            dbuser2 = await users.getByCredentials(db, user.email, 'wrong-password');
-        } catch (e) {
-            error = e;
-        }
-        expect(error)
-            .toBe(null);
-        expect(dbuser1.email)
-            .toBe(user.email);
-        expect(dbuser2)
-            .toBe(null);
-    });
-});
-
-describe('tasks', async () => {
-    let dbusers = [];
-    beforeEach(async () => {
-        // Insert the demo users
-        const promises = demoUsers.map(u => users.insert(db, u.name, u.email, u.password));
-        dbusers = await Promise.all(promises);
-    });
-
-    test('can be inserted', async () => {
-        let error = null;
-        const u = dbusers[0];
-        const t = demoTasks[0];
-        let dbtask;
-        try {
-            dbtask = await tasks.insert(db, u.id, t.name, t.description);
-        } catch (e) {
-            error = e;
-        }
-        expect(error)
-            .toBeNull();
-        expect(await tasks.count(db))
-            .toBe(1);
-        expect(dbtask.user_id)
-            .toBe(u.id);
-    });
-
-    test('can be retrieved by user id', async () => {
-        let error = null;
-        const u = dbusers[0];
-        const t = demoTasks[0];
-        let tasksForUser;
-        try {
-            await tasks.insert(db, u.id, t.name, t.description);
-            tasksForUser = await tasks.getByUserID(db, u.id);
-        } catch (e) {
-            error = e;
-        }
-        expect(error)
-            .toBeNull();
-        expect(await tasks.count(db))
-            .toBe(1);
-        expect(tasksForUser.length)
-            .toBe(1);
-        expect(tasksForUser[0].is_owned)
-            .toBe(true);
-    });
-
-    test('can only be deleted by the owner', async () => {
-        let error = null;
-        const u0 = dbusers[0];
-        const u1 = dbusers[1];
-        const t = demoTasks[0];
-        let numDeleted;
-        let tasksForUser;
-
-        // Insert task
-        try {
-            await tasks.insert(db, u0.id, t.name, t.description);
-            tasksForUser = await tasks.getByUserID(db, u0.id);
-        } catch (e) {
-            error = e;
-        }
-        expect(error)
-            .toBeNull();
-
-        // Other user cannot delete
-        try {
-            numDeleted = await tasks.deleteForUserByID(db, u1.id, tasksForUser[0].id);
-        } catch (e) {
-            error = e;
-        }
-        expect(error)
-            .toBeNull();
-        expect(numDeleted)
-            .toBe(0);
-
-        // But the owner can
-        try {
-            numDeleted = await tasks.deleteForUserByID(db, u0.id, tasksForUser[0].id);
-        } catch (e) {
-            error = e;
-        }
-        expect(error)
-            .toBeNull();
-        expect(numDeleted)
-            .toBe(1);
-    });
-
-
-    test('can be shared with other users', async () => {
-        let error = null;
-        const u0 = dbusers[0];
-        const u1 = dbusers[1];
-        const t = demoTasks[0];
-        let tasksForUser;
-        try {
-            const dbtask = await tasks.insert(db, u0.id, t.name, t.description);
-            await tasks.shareWithUserByID(db, u1.id, dbtask.id);
-            tasksForUser = await tasks.getByUserID(db, u1.id);
-        } catch (e) {
-            error = e;
-        }
-        expect(error)
-            .toBeNull();
-        expect(tasksForUser.length)
-            .toBe(1);
-    });
-
-
-    test('can be toggled complete only by owner and collaborators', async () => {
-        let error = null;
-        const u0 = dbusers[0];
-        const u1 = dbusers[1];
-        const u2 = dbusers[2];
-        const t = demoTasks[0];
-        let dbtask1;
-        let dbtask2;
-        let rowsToggled;
-
-        // Insert task
-        try {
-            dbtask1 = await tasks.insert(db, u0.id, t.name, t.description);
-            await tasks.shareWithUserByID(db, u1.id, dbtask1.id);
-        } catch (e) {
-            error = e;
-        }
-        expect(error)
-            .toBeNull();
-
-        // User 2 should not be able to toggle
-        try {
-            rowsToggled = await tasks.toggleCompleteForUserByID(db, u2.id, dbtask1.id);
-            dbtask2 = await tasks.getByID(db, dbtask1.id);
-        } catch (e) {
-            error = e;
-        }
-        expect(error)
-            .toBeNull();
-        expect(rowsToggled)
-            .toBe(0);
-        expect(dbtask2.is_complete)
-            .toBe(false);
-
-        // User 1 should  be able to toggle
-        try {
-            rowsToggled = await tasks.toggleCompleteForUserByID(db, u1.id, dbtask1.id);
-            dbtask2 = await tasks.getByID(db, dbtask1.id);
-        } catch (e) {
-            error = e;
-        }
-        expect(error)
-            .toBeNull();
-        expect(rowsToggled)
-            .toBe(1);
-        expect(dbtask2.is_complete)
-            .toBe(true);
-
-        // User 0 should  be able to toggle back
-        try {
-            rowsToggled = await tasks.toggleCompleteForUserByID(db, u0.id, dbtask1.id);
-            dbtask2 = await tasks.getByID(db, dbtask1.id);
-        } catch (e) {
-            error = e;
-        }
-        expect(error)
-            .toBeNull();
-        expect(rowsToggled)
-            .toBe(1);
-        expect(dbtask2.is_complete)
-            .toBe(false);
-    });
-
-    test('can be created with collaborators', async () => {
-        const u0 = dbusers[0];
-        const u1 = dbusers[1];
-        const t = demoTasks[0];
-        const emails = demoUsers.map(u => u.email);
-        let error = null;
-        try {
-            await tasks.insertWithCollaboratorsByEmail(db, u0.id, t.name, t.description, emails);
-        } catch (e) {
-            console.error(e);
-            error = e;
-        }
-        expect(error)
-            .toBeNull();
-        expect(await tasks.count(db))
-            .toBe(1);
-        let tasksForUser = await tasks.getByUserID(db, u0.id);
-        expect(tasksForUser.length)
-            .toBe(1);
-        tasksForUser = await tasks.getByUserID(db, u1.id);
-        expect(tasksForUser.length)
-            .toBe(1);
-    });
-
-
-    test('cannot be created with invalid collaborators', async () => {
-        const u0 = dbusers[0];
-        const u1 = dbusers[1];
-        const t = demoTasks[0];
-        const emails = ['invalid@invalid.com', u1.email];
-        let error = null;
-        try {
-            await tasks.insertWithCollaboratorsByEmail(db, u0.id, t.name, t.description, emails);
-        } catch (e) {
-            error = e;
-        }
-        expect(error)
-            .not.toBeNull();
-        expect(await tasks.count(db))
-            .toBe(0);
-    });
-
-    test('can be created with empty collaborators', async () => {
-        const u0 = dbusers[0];
-        const t = demoTasks[0];
-        let error = null;
-        try {
-            await tasks.insertWithCollaboratorsByEmail(db, u0.id, t.name, t.description, []);
-        } catch (e) {
-            error = e;
-        }
-        expect(error)
-            .toBeNull();
-        expect(await tasks.count(db))
-            .toBe(1);
     });
 });
