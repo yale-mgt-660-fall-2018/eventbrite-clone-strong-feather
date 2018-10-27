@@ -1,19 +1,9 @@
 const Koa = require('koa');
-const session = require('koa-session');
 const pgp = require('pg-promise')();
 const views = require('koa-views');
 const bodyParser = require('koa-bodyparser');
 const path = require('path');
-const passport = require('koa-passport');
 const router = require('./routes/routes.js');
-
-passport.serializeUser((user, done) => {
-    done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-    done(null, user);
-});
 
 /**
  * createApp - returns a Koa application given a config
@@ -26,11 +16,6 @@ function createApp(config) {
 
     app.use(bodyParser());
 
-    app.keys = [config.secret];
-    app.use(session(app));
-    app.use(passport.initialize());
-    app.use(passport.session());
-
     // Add the database to the app's context prototype.
     // This will make the db available in all controllers.
     app.context.db = pgp(config.databaseURL);
@@ -40,7 +25,7 @@ function createApp(config) {
 
     // Add view/template engine
     app.use(views(path.join(__dirname, 'views'), {
-        map: { hbs: 'handlebars', njk: 'nunjucks' },
+        map: { njk: 'nunjucks' },
     }));
 
     // Attach our routes.
