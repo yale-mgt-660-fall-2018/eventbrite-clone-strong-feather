@@ -159,3 +159,59 @@ Ran all test suites.
 │       └── index.hbs
 └── start.js - Script that starts the app (the server)
 ```
+
+## Sage counsel
+
+It will benefit both you and me if you come to office hours. Also, you
+ought to feel free to ask project-related questions at the start of class
+each day. And, you can always send me code, screenshots, questions, and
+problems through Piazza.
+
+Here are a few pieces of advice that I think are particuarly important
+and that I want to give you at the very start of your project.
+
+* Get good at git. Use branching. Use line-by-line staging, such as that
+  you can get using the GitHub gui, GitX, or other git guis.
+* Push to branches on GitHub. Figure out who on your team is going to 
+  merge branches into master.
+* Write tests. I wrote a number of tests in this repo and I hope they
+  illustrate to you the utility of tests. It makes writing code faster
+  and allows you to make changes in the future with greater confidence.
+  Don't make commits to master until you've run your tests and verify
+  they pass.
+* Make your database do the work. This project has a few "integrity"
+  related requirements, e.g. event titles have to be no more than 
+  XYZ characters. You should code that constraint in the database
+  rather than the app. There are two reasons for this: 1) relational
+  databases are *fantastic* at enforcing constraints on data and
+  doing so using a
+  [declarative](https://en.wikipedia.org/wiki/Declarative_programming)
+  fashion; and, 2) this means your database is always "correct", so 
+  that if another program wants to use the database---like an API server
+  for mobile clients written in a different language---you don't have
+  to reimplement the data integrity logic. It ought to be *impossible*
+  to store invalid data in your database. Using this method, your
+  app should try to store data in the database (like a new event)
+  and then check for errors returned by the database, rather than 
+  checking for data integrity and then sending it to the database.
+* Make your controllers/handlers "skinny". Make your models "fat". Keep logic
+  out of the controller and move it to the model-related code. E.g.
+  if your controller needs to create a new event or RSVP a person
+  for an event, create a function in your models code for that.
+  The function should be small and you should write a test for
+  it. It is easier to test functions like that than it is to 
+  test controllers/handlers.
+* Don't ignore complainst by ESLint. Customize the `.jsbeautifyrc`
+  file as you like, also the `.eslintrc` file.
+* RTFMP---read the freaking "man" pages. "Man" pages are the
+  manual pages of old. You likely won't use man pages *per se*
+  (though you can on your mac/*nix machine---type "man"), but
+  instead you'll definitely need to often to refer to the documentation
+  for packages/modules/projects you're using such as Koa, pgpromise,
+  nunjucks, and whatever you add yourself. How do you add static
+  assets? RTFMP. Parse a POST body? RTFMP. A huge part of development
+  is RTFMP and also reading other people's code.
+* Don't get frustrated. If you get stuck for more than 30m, take
+  a walk, talk to the TAs or another students. If you're still stuck,
+  please talk to me. I will know most answers immediately and I'm
+  happy to help.
