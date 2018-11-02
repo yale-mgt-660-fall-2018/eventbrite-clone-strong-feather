@@ -1,0 +1,24 @@
+service: default
+
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+
+- url: /public
+  static_dir: public
+  secure: always
+
+- url: /public/app
+  static_dir: public/app
+  secure: always
+
+- url: /.*
+  script: main.app
+
+libraries:
+- name: webapp2
+  version: latest
+- name: jinja2
+  version: latest
