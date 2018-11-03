@@ -1,3 +1,5 @@
+/*globals angular */
+/*eslint-disable no-unused-params */
 var main = angular.module('EventApp', ['ngMaterial', 'ngMessages']);
 var Controllers = Controllers || {};
 
@@ -9,6 +11,8 @@ main.config(['$interpolateProvider', function($interpolateProvider) {
 
 Controllers.main = function($scope) {
   var ctrl = this;
+
+  ctrl.isOpen = false;
 
   ctrl.hello = 'World!';
 };

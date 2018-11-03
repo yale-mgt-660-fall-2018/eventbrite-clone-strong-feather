@@ -14,6 +14,10 @@ handlers:
   static_dir: public/app
   secure: always
 
+- url: /public/assets
+  static_dir: public/assets
+  secure: always
+
 - url: /.*
   script: main.app
 
