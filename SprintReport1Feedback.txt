@@ -1,0 +1,4 @@
+Wiki closed. Feedback: 
+* Please have user stories. 
+* No burndown chart (and not described). 
+* Great narrative. 
