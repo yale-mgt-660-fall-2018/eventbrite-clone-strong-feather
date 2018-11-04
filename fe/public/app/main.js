@@ -12,9 +12,14 @@ main.config(['$interpolateProvider', function($interpolateProvider) {
 Controllers.main = function($scope) {
   var ctrl = this;
 
-  ctrl.isOpen = false;
+  ctrl.events = [
+    {'title': 'Mega Party', 'subtitle': 'Things we will not do.', 'img': 'https://i.ytimg.com/vi/8XUETU0Yrpo/hqdefault.jpg'},
+    {'title': 'Huge Party', 'subtitle': 'Things we do.'},
+  ];
 
-  ctrl.hello = 'World!';
 };
+
+main.controller('EventCardController', EventCardController);
+main.directive("eventCard", EventCardDirective);
 
 main.controller('MainCtrl', Controllers.main);

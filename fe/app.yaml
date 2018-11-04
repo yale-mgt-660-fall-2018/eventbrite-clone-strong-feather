@@ -18,6 +18,14 @@ handlers:
   static_dir: public/assets
   secure: always
 
+- url: /public/components
+  static_dir: public/components
+  secure: always
+
+- url: /public/components/event
+  static_dir: public/components/event
+  secure: always
+
 - url: /.*
   script: main.app
 

@@ -1,12 +1,26 @@
-AdminForms.Directives.CompanyCard = function() {
+function EventCardController($mdDialog){
+  var ctrl = this;
+
+  ctrl.openRSVPMenu = function($mdMenu, ev) {
+    $mdMenu.open(ev);
+  };
+
+  ctrl.RSVP_CHOICES = ['Yes', 'No', 'Interested'];
+
+  ctrl.setRSVP = function(option) {
+    ctrl.RSVP = option;
+  };
+
+}
+
+function EventCardDirective() {
   return {
     scope:{},
-    controller: 'CompanyFormCardCtrl as ctrl',
+    controller: 'EventCardController as ct',
     bindToController: {
-      company: "=company",
-      index: "=index"
+      dtx: "=dtx"
     },
     restrict: 'E', // make a custom element.
-    templateUrl: '../templates/admin/company-form.html'
+    templateUrl: '../public/components/event/component.html'
   };
-};
+}
