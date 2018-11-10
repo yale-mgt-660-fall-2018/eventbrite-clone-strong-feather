@@ -1,0 +1,34 @@
+<md-dialog aria-label="Create an Event" class="md-block creation-modal">
+
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Create an Event</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="/public/assets/clear.svg"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-input-container class="md-block" flex-gt-sm>
+      <label>Title</label>
+      <input ng-model="event.title">
+    </md-input-container>
+
+
+
+  <fieldset>
+    <legend><i>preview</i></legend>
+    <div layout="row" layout-align="center center">
+
+      <event-card dtx="event"></event-card>
+    </div>
+  </fieldset>
+
+  <md-dialog-actions layout="row">
+    <span flex></span>
+    <md-button ng-click="answer('not useful')">Cancel</md-button>
+    <md-button ng-click="answer('useful')">Create</md-button>
+  </md-dialog-actions>
+
+</md-dialog>

@@ -17,15 +17,12 @@
     <script src="/public/app/main.js"></script>
   </head>
   <body ng-app="EventApp" ng-controller="MainCtrl as ctrl" ng-cloak>
-
-    <event-card ng-repeat="event in ctrl.events" dtx="event"></event-card>
-
-    [[ctrl]]
+    <event-card ng-repeat="event in ctrl.events track by $index" dtx="event" id="event_[[ $index ]]"></event-card>
     <footer layout="row">
       <div flex>
       </div>
       <div layout-align="center end">
-        <md-fab-speed-dial md-open="ctrl.FabOpen" md-direction="up" ng-hide="true">
+        <md-fab-speed-dial md-open="ctrl.FabOpen" md-direction="up">
           <md-fab-trigger>
             <md-button aria-label="menu" class="md-fab md-primary">
               <md-icon md-svg-src="/public/assets/plus.svg"></md-icon>
@@ -35,6 +32,10 @@
             <md-button aria-label="Register" class="md-fab md-mini">
               <md-tooltip md-direction="left">Register for an account</md-tooltip>
               <md-icon md-svg-src="/public/assets/account-plus.svg"></md-icon>
+            </md-button>
+            <md-button ng-click="ctrl.showModal($event)" aria-label="Register" class="md-fab md-mini">
+              <md-tooltip md-direction="left">Create an Event</md-tooltip>
+              <md-icon md-svg-src="/public/assets/plus.svg"></md-icon>
             </md-button>
             <md-button aria-label="Donate" class="md-fab md-mini">
               <md-tooltip md-direction="left">Chip In</md-tooltip>

@@ -1,3 +1,14 @@
+.creation-modal {
+  min-width: 600px;
+}
+
+.event-card {
+  min-width:400px;
+}
 .event-image {
   max-width:200px;
+}
+
+fieldset {
+  border: 1px groove;
 }
