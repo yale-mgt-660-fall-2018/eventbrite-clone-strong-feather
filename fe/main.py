@@ -5,15 +5,15 @@ import jinja2
 import wsgiref.handlers
 import os
 import json
-
 from datetime import datetime
 
-
 def format_to_json(data_stream):
+  # Convert whole thing to string before JSON serializing, as date objects don't
+  # do well in JSON.
   return json.dumps(str(data_stream))
 
 def get_data(parameter):
-
+  ## Return a constant for the moment.
   return format_to_json(
     [
       {
