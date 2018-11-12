@@ -9,13 +9,17 @@ main.config(['$interpolateProvider', function($interpolateProvider) {
   $interpolateProvider.endSymbol(']]');
 }]);
 
-Controllers.main = function($scope, $mdDialog) {
+Controllers.main = function($scope, $mdDialog, AJAXService) {
   var ctrl = this;
 
-  ctrl.events = [
-    {'title': 'Mega Party', 'subtitle': 'Things we will not do.', 'img': 'https://i.ytimg.com/vi/8XUETU0Yrpo/hqdefault.jpg'},
-    {'title': 'Huge Party', 'subtitle': 'Things we do.'},
-  ];
+  var promise = AJAXService.get('/api/events', {});
+  promise.then(function(response){
+    console.log(response['data']);
+    ctrl.events = response['data'];
+  }, function(error) {
+    // Add Error Toast.
+    console.log(error);
+  });
 
   ctrl.showModal = function(ev) {
     $mdDialog.show({
@@ -30,7 +34,7 @@ Controllers.main = function($scope, $mdDialog) {
     }, function() {
       alert('Canceled Modal');
     });
-  }
+  };
 
   function DialogController($scope, $mdDialog) {
     $scope.hide = function() {
@@ -48,6 +52,7 @@ Controllers.main = function($scope, $mdDialog) {
 
 };
 
+main.service('AJAXService', Services.AJAXyService);
 main.controller('EventCardController', EventCardController);
 main.directive("eventCard", EventCardDirective);
 

@@ -8,9 +8,8 @@ import json
 from datetime import datetime
 
 def format_to_json(data_stream):
-  # Convert whole thing to string before JSON serializing, as date objects don't
-  # do well in JSON.
-  return json.dumps(str(data_stream))
+  # NB. Dates don't do well in Python JSON.
+  return json.dumps(data_stream, default=str)
 
 def get_data(parameter):
   ## Return a constant for the moment.
@@ -67,7 +66,6 @@ class EventAPIHandler(webapp.RequestHandler):
     self.response.write(events)
   def post(self):
     print('Filing to dev/null!')
-
 
 app = webapp.WSGIApplication(
   # List of tuples mapping routes to class handlers.

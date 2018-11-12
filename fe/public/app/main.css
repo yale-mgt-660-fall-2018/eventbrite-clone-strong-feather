@@ -12,3 +12,7 @@
 fieldset {
   border: 1px groove;
 }
+
+html body {
+  background-color: #e91e63;
+}
