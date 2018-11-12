@@ -2,7 +2,16 @@
   <md-card-title>
     <md-card-title-text>
       <span class="md-headline">[[ ct.dtx.title ]]</span>
-      <span class="md-subhead">[[ ct.dtx.subtitle ]]</span>
+      <div layout="column">
+        <div layout="row">
+          <md-icon style="max-width:30px" md-svg-src="public/assets/location.svg" flex></md-icon>
+          <span flex>[[ ct.dtx.location ]]</span>
+        </div>
+        <div layout="row">
+          <md-icon style="max-width:30px" md-svg-src="public/assets/time.svg" flex></md-icon>
+          <span flex>[[ ct.dtx.date | date:'yyyy-MM-dd HH:mm' ]]</span>
+        </div>
+      </div>
     </md-card-title-text>
     <md-card-title-media>
       <img ng-if="ct.dtx.imageURL" ng-src="[[ ct.dtx.imageURL ]]" class="event-image">
@@ -23,4 +32,11 @@
   <md-chips md-margin class="md-mini">
     <md-chip>RSVP: <span ng-if="!ct.RSVP">?</span>[[ct.RSVP]]</md-chip>
   </md-chips>
+  <div ng-mouseenter="ct.showAttendees = True">
+    <span><i>Attendees:</i></span>
+    <div ng-show="ct.showAttendees">
+      <span ng-repeat="guest in ct.dtx.attending track by $index">[[ guest ]]</span>
+    </div>
+  </div>
+
 </md-card>

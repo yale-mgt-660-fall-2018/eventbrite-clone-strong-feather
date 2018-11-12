@@ -18,10 +18,14 @@
     <script src="/public/app/main.js"></script>
   </head>
   <body ng-app="EventApp" ng-controller="MainCtrl as ctrl" ng-cloak>
-    <event-card ng-repeat="event in ctrl.events track by $index" dtx="event" id="event_[[ $index ]]"></event-card>
-    <footer layout="row">
-      <div flex>
-      </div>
+
+    <md-grid-list md-cols="2" md-row-height="1:1" md-gutter="12px">
+      <md-grid-tile ng-repeat="event in ctrl.events track by $index">
+        <event-card dtx="event" id="event_[[ $index ]]"></event-card>
+        </md-grid-tile>
+    </md-grid-list>
+
+
       <div layout-align="center end">
         <md-fab-speed-dial md-open="ctrl.FabOpen" md-direction="up">
           <md-fab-trigger>
@@ -49,6 +53,7 @@
           </md-fab-actions>
         </md-fab-speed-dial>
       </div>
+    <footer layout="row">
     </footer>
   </body>
 </html>
