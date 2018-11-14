@@ -10,7 +10,7 @@ function EventCardController($mdDialog, AJAXService){
   ctrl.setRSVP = function(option) {
     ctrl.RSVP = option;
 
-    var promise = AJAXService.post('/api/events', 'hello!')
+    var promise = AJAXService.post('/api/events', {'RSVP': option});
 
     promise.then(function(reponse) {
       console.info(response);

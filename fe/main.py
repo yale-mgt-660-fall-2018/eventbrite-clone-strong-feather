@@ -55,6 +55,9 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 class MainPageHandler(webapp.RequestHandler):
   def get(self):
+
+    print self.request
+
     template_values = {'title': 'Strong Feather Events'}
     template = JINJA_ENVIRONMENT.get_template('index.html')
 
@@ -65,7 +68,10 @@ class EventAPIHandler(webapp.RequestHandler):
     events = get_data('events')
     self.response.write(events)
   def post(self):
-    print('Filing to dev/null!')
+    payload = self.request
+    data = payload.body
+    print data
+
 
 app = webapp.WSGIApplication(
   # List of tuples mapping routes to class handlers.

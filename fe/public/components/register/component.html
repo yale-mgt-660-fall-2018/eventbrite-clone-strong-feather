@@ -1,0 +1,34 @@
+<md-dialog aria-label="Register for an Account" class="md-block creation-modal">
+
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Register for an Account</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="/public/assets/clear.svg"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <!-- TODO racewright: add validation logic -->
+    <md-input-container>
+      <label>Name</label>
+      <input ng-model="user.name" >
+    </md-input-container>
+    <md-input-container>
+      <label>Email</label>
+      <input ng-model="user.email" type="email">
+    </md-input-container>
+    <md-input-container>
+      <label>Password</label>
+      <input ng-model="user.password" type="password">
+    </md-input-container>
+
+
+  <md-dialog-actions layout="row">
+    <span flex></span>
+    <md-button ng-click="answer('not useful')">Cancel</md-button>
+    <md-button ng-click="answer('useful')" class="md-primary md-raised">Register</md-button>
+  </md-dialog-actions>
+
+</md-dialog>

@@ -23,18 +23,27 @@ Controllers.main = function($scope, $mdDialog, AJAXService) {
 
   ctrl.showModal = function(ev, flag) {
 
+    var template = '';
+    if(flag == 'event') {
+      var template = '../public/components/event/create.html';
+    };
+    if(flag == 'register') {
+      var template = '../public/components/register/component.html';
+    };
 
-    $mdDialog.show({
-      controller: DialogController,
-      templateUrl: '../public/components/event/create.html',
-      parent: angular.element(document.body),
-      targetEvent: ev,
-      clickOutsideToClose: true,
-      fullscreen: true,
-    }).then(function(answer) {
-      alert('Completed Modal');
-    }, function() {
-      alert('Canceled Modal');
+    var payload = {
+      'controller': DialogController,
+      'templateUrl': template,
+      'parent': angular.element(document.body),
+      'targetEvent': ev,
+      'clickOutsideToClose': true,
+      'fullscreen': true,
+    };
+
+    $mdDialog.show(payload).then(function(answer) {
+
+    }, function(error) {
+
     });
   };
 
@@ -48,7 +57,7 @@ Controllers.main = function($scope, $mdDialog, AJAXService) {
     };
 
     $scope.answer = function(answer) {
-      $mdDialog.hide(answer);
+      $mdDialog.hide();
     };
   }
 
@@ -57,5 +66,8 @@ Controllers.main = function($scope, $mdDialog, AJAXService) {
 main.service('AJAXService', Services.AJAXyService);
 main.controller('EventCardController', EventCardController);
 main.directive("eventCard", EventCardDirective);
+
+main.controller('RegisterCardController', RegisterCardController);
+main.directive("registerCard", RegisterCardDirective);
 
 main.controller('MainCtrl', Controllers.main);

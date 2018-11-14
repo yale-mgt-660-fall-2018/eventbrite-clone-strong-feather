@@ -26,6 +26,10 @@ handlers:
   static_dir: public/components/event
   secure: always
 
+- url: /public/components/register
+  static_dir: public/components/register
+  secure: always
+
 - url: /.*
   script: main.app
 
