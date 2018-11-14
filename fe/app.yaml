@@ -4,6 +4,11 @@ runtime: python27
 api_version: 1
 threadsafe: true
 
+CLOUD_SQL_USERNAME: postgres
+CLOUD_SQL_PASSWORD: mgt660-strongfeather
+CLOUD_SQL_DATABASE_NAME: eventbrite
+CLOUD_SQL_CONNECTION_NAME: mgt660-strongfeather:northamerica-northeast1:mgt660-strongfeather
+
 handlers:
 
 - url: /public
