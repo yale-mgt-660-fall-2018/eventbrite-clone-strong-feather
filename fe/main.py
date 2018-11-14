@@ -7,6 +7,15 @@ import os
 import json
 from datetime import datetime
 
+db_user = os.environ.get('CLOUD_SQL_USERNAME')
+db_password = os.environ.get('CLOUD_SQL_PASSWORD')
+db_name = os.environ.get('CLOUD_SQL_DATABASE_NAME')
+db_connection_name = os.environ.get('CLOUD_SQL_CONNECTION_NAME')
+
+cnx = psycopg2.connect(dbname=db_name, user=db_user,
+                       password=db_password, host=host)
+
+
 def format_to_json(data_stream):
   # NB. Dates don't do well in Python JSON.
   return json.dumps(data_stream, default=str)
