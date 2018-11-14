@@ -21,7 +21,9 @@ Controllers.main = function($scope, $mdDialog, AJAXService) {
     console.log(error);
   });
 
-  ctrl.showModal = function(ev) {
+  ctrl.showModal = function(ev, flag) {
+
+
     $mdDialog.show({
       controller: DialogController,
       templateUrl: '../public/components/event/create.html',

@@ -27,37 +27,37 @@
     </md-grid-list>
 
 
-      <div layout="row" layout-align="center end" class="footer">
+    <div layout="row" layout-align="center end" class="footer">
 
-        <div flex></div>
-        <div>
-          <span flex></span>
-          <md-fab-speed-dial md-open="ctrl.FabOpen" md-direction="up">
-            <md-fab-trigger>
-              <md-button aria-label="menu" class="md-fab md-primary">
-                <md-icon md-svg-src="/public/assets/plus.svg"></md-icon>
-              </md-button>
-            </md-fab-trigger>
-            <md-fab-actions>
-              <md-button aria-label="Register" class="md-fab md-mini">
-                <md-tooltip md-direction="left">Register for an account</md-tooltip>
-                <md-icon md-svg-src="/public/assets/account-plus.svg"></md-icon>
-              </md-button>
-              <md-button ng-click="ctrl.showModal($event)" aria-label="Register" class="md-fab md-mini">
-                <md-tooltip md-direction="left">Create an Event</md-tooltip>
-                <md-icon md-svg-src="/public/assets/plus.svg"></md-icon>
-              </md-button>
-              <md-button aria-label="Donate" class="md-fab md-mini">
-                <md-tooltip md-direction="left">Chip In</md-tooltip>
-                <md-icon md-svg-src="/public/assets/currency-usd.svg"></md-icon>
-              </md-button>
-              <md-button aria-label="Comment" class="md-fab md-mini">
-                <md-tooltip md-direction="left">Comment</md-tooltip>
-                <md-icon md-svg-src="/public/assets/comment-plus.svg"></md-icon>
-              </md-button>
-            </md-fab-actions>
-          </md-fab-speed-dial>
-        </div>
+      <div flex></div>
+      <div>
+        <span flex></span>
+        <md-fab-speed-dial md-open="ctrl.FabOpen" md-direction="up">
+          <md-fab-trigger>
+            <md-button aria-label="menu" class="md-fab md-primary">
+              <md-icon md-svg-src="/public/assets/plus.svg"></md-icon>
+            </md-button>
+          </md-fab-trigger>
+          <md-fab-actions>
+            <md-button ng-click="ctrl.showModal($event, 'register')" aria-label="Register" class="md-fab md-mini">
+              <md-tooltip md-direction="left">Register for an account</md-tooltip>
+              <md-icon md-svg-src="/public/assets/account-plus.svg"></md-icon>
+            </md-button>
+            <md-button ng-click="ctrl.showModal($event, 'event')" aria-label="Create Event" class="md-fab md-mini">
+              <md-tooltip md-direction="left">Create an Event</md-tooltip>
+              <md-icon md-svg-src="/public/assets/plus.svg"></md-icon>
+            </md-button>
+            <md-button aria-label="Donate" class="md-fab md-mini">
+              <md-tooltip md-direction="left">Chip In</md-tooltip>
+              <md-icon md-svg-src="/public/assets/currency-usd.svg"></md-icon>
+            </md-button>
+            <md-button aria-label="Comment" class="md-fab md-mini">
+              <md-tooltip md-direction="left">Comment</md-tooltip>
+              <md-icon md-svg-src="/public/assets/comment-plus.svg"></md-icon>
+            </md-button>
+          </md-fab-actions>
+        </md-fab-speed-dial>
       </div>
+    </div>
   </body>
 </html>

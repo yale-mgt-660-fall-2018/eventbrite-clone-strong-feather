@@ -1,4 +1,4 @@
-function EventCardController($mdDialog){
+function EventCardController($mdDialog, AJAXService){
   var ctrl = this;
 
   ctrl.openRSVPMenu = function($mdMenu, ev) {
@@ -9,6 +9,12 @@ function EventCardController($mdDialog){
 
   ctrl.setRSVP = function(option) {
     ctrl.RSVP = option;
+
+    var promise = AJAXService.post('/api/events', 'hello!')
+
+    promise.then(function(reponse) {
+      console.info(response);
+    }, function(error){ console.log(error);});
   };
 
 }
