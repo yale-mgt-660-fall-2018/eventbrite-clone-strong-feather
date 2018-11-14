@@ -18,6 +18,17 @@
       <img ng-if="!ct.dtx.imageURL" src="./public/assets/default-party.jpg" class="event-image">
     </md-card-title-media>
   </md-card-title>
+  <md-card-content layout="column">
+    <div>
+      <md-chips md-margin class="md-mini">
+        <md-chip>RSVP: <span ng-if="!ct.RSVP">?</span>[[ct.RSVP]]</md-chip>
+      </md-chips>
+    </div>
+    <div><i>Attending:</i> <br />
+      <span ng-repeat="guest in ct.dtx.attending">[[ guest ]]<span ng-if="!$last"> • </span></span>
+    </div>
+
+
   <md-card-actions layout="row" layout-align="end end" md-padding="4px">
     <md-button>Donate</md-button>
     <md-menu>
@@ -29,14 +40,6 @@
       </md-menu-content>
     </md-menu>
   </md-card-actions>
-  <md-chips md-margin class="md-mini">
-    <md-chip>RSVP: <span ng-if="!ct.RSVP">?</span>[[ct.RSVP]]</md-chip>
-  </md-chips>
-  <div ng-mouseenter="ct.showAttendees = True">
-    <span><i>Attendees:</i></span>
-    <div ng-show="ct.showAttendees">
-      <span ng-repeat="guest in ct.dtx.attending track by $index">[[ guest ]]</span>
-    </div>
-  </div>
+
 
 </md-card>

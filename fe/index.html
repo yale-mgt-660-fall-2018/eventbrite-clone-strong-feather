@@ -19,41 +19,45 @@
   </head>
   <body ng-app="EventApp" ng-controller="MainCtrl as ctrl" ng-cloak>
 
-    <md-grid-list md-cols="2" md-row-height="1:1" md-gutter="12px">
+    <!--TODO: racewright. Make grid responsive. -->
+    <md-grid-list md-cols="3" md-row-height="1:1" md-gutter="12px">
       <md-grid-tile ng-repeat="event in ctrl.events track by $index">
         <event-card dtx="event" id="event_[[ $index ]]"></event-card>
         </md-grid-tile>
     </md-grid-list>
 
 
-      <div layout-align="center end">
-        <md-fab-speed-dial md-open="ctrl.FabOpen" md-direction="up">
-          <md-fab-trigger>
-            <md-button aria-label="menu" class="md-fab md-primary">
-              <md-icon md-svg-src="/public/assets/plus.svg"></md-icon>
-            </md-button>
-          </md-fab-trigger>
-          <md-fab-actions>
-            <md-button aria-label="Register" class="md-fab md-mini">
-              <md-tooltip md-direction="left">Register for an account</md-tooltip>
-              <md-icon md-svg-src="/public/assets/account-plus.svg"></md-icon>
-            </md-button>
-            <md-button ng-click="ctrl.showModal($event)" aria-label="Register" class="md-fab md-mini">
-              <md-tooltip md-direction="left">Create an Event</md-tooltip>
-              <md-icon md-svg-src="/public/assets/plus.svg"></md-icon>
-            </md-button>
-            <md-button aria-label="Donate" class="md-fab md-mini">
-              <md-tooltip md-direction="left">Chip In</md-tooltip>
-              <md-icon md-svg-src="/public/assets/currency-usd.svg"></md-icon>
-            </md-button>
-            <md-button aria-label="Comment" class="md-fab md-mini">
-              <md-tooltip md-direction="left">Comment</md-tooltip>
-              <md-icon md-svg-src="/public/assets/comment-plus.svg"></md-icon>
-            </md-button>
-          </md-fab-actions>
-        </md-fab-speed-dial>
+      <div layout="row" layout-align="center end" class="footer">
+
+        <div flex></div>
+        <div>
+          <span flex></span>
+          <md-fab-speed-dial md-open="ctrl.FabOpen" md-direction="up">
+            <md-fab-trigger>
+              <md-button aria-label="menu" class="md-fab md-primary">
+                <md-icon md-svg-src="/public/assets/plus.svg"></md-icon>
+              </md-button>
+            </md-fab-trigger>
+            <md-fab-actions>
+              <md-button aria-label="Register" class="md-fab md-mini">
+                <md-tooltip md-direction="left">Register for an account</md-tooltip>
+                <md-icon md-svg-src="/public/assets/account-plus.svg"></md-icon>
+              </md-button>
+              <md-button ng-click="ctrl.showModal($event)" aria-label="Register" class="md-fab md-mini">
+                <md-tooltip md-direction="left">Create an Event</md-tooltip>
+                <md-icon md-svg-src="/public/assets/plus.svg"></md-icon>
+              </md-button>
+              <md-button aria-label="Donate" class="md-fab md-mini">
+                <md-tooltip md-direction="left">Chip In</md-tooltip>
+                <md-icon md-svg-src="/public/assets/currency-usd.svg"></md-icon>
+              </md-button>
+              <md-button aria-label="Comment" class="md-fab md-mini">
+                <md-tooltip md-direction="left">Comment</md-tooltip>
+                <md-icon md-svg-src="/public/assets/comment-plus.svg"></md-icon>
+              </md-button>
+            </md-fab-actions>
+          </md-fab-speed-dial>
+        </div>
       </div>
-    <footer layout="row">
-    </footer>
   </body>
 </html>
