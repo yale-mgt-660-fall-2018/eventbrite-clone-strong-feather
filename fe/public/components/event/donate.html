@@ -1,0 +1,27 @@
+<md-dialog aria-label="Chip In" class="md-block creation-modal">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Chip in for [[ event ]]</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cancel()">
+        <md-icon md-svg-src="/public/assets/clear.svg"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-input-container>
+    <label>Email</label>
+    <input ng-model="email" type="email" ng-keyup="check()" required>
+    <div class="small-text"><i>A valid yale.edu email address is required.</i></div>
+  </md-input-container>
+  <md-input-container>
+    <label>Donation Amount USD</label>
+    <input ng-model="donation" type="number" ng-keyup="check()" required>
+    <div class="small-text"><i>Please use positive numbers.</i></div>
+  </md-input-container>
+  <md-dialog-actions layout="row">
+    <span flex></span>
+    <md-button ng-click="cancel()">Cancel</md-button>
+    <md-button ng-disabled="buttonDisabled" ng-click="donate()" class="md-primary md-raised">[[ give_language ]]</md-button>
+  </md-dialog-actions>
+
+</md-dialog>

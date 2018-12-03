@@ -1,5 +1,14 @@
 <html>
   <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-130211160-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-130211160-1');
+    </script>
 
     <link rel="stylesheet" type="text/css" href="./public/app/main.css">
     <!-- Angular Libraries -->
@@ -10,7 +19,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular-messages.min.js"></script>
 
     <!-- Angular Material-->
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.10/angular-material.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.10/angular-material.min.js"></script>
 
     <script src="/public/components/event/controller.js"></script>
@@ -19,47 +28,26 @@
     <script src="/public/app/services.js"></script>
     <script src="/public/app/main.js"></script>
   </head>
+  <header>
+    <md-toolbar class="md-tall">
+      <div layout="row">
+        <img src="/public/assets/feather.png" / class="logo">
+        <h1>Strong Feather Events</h1>
+      </div>
+    </md-toolbar>
+
+  </header>
+
   <body ng-app="EventApp" ng-controller="MainCtrl as ctrl" ng-cloak>
 
     <!--TODO: racewright. Make grid responsive. -->
-    <md-grid-list md-cols="3" md-row-height="1:1" md-gutter="12px">
-      <md-grid-tile ng-repeat="event in ctrl.events track by $index">
-        <event-card dtx="event" id="event_[[ $index ]]"></event-card>
+    <div class="tilegrid">
+      <md-grid-list md-cols="1" md-cols-gt-md="2" md-cols-gt-lg="3" md-row-height="1:1" md-gutter="12px">
+        <md-grid-tile ng-repeat="event in ctrl.events track by $index">
+          <event-card dtx="event" id="event_[[ $index ]]"></event-card>
         </md-grid-tile>
-    </md-grid-list>
-
-
-    <div layout="row" layout-align="center end" class="footer">
-
-      <div flex></div>
-      <div>
-        <span flex></span>
-        <md-fab-speed-dial md-open="ctrl.FabOpen" md-direction="up">
-          <md-fab-trigger>
-            <md-button aria-label="menu" class="md-fab md-primary">
-              <md-icon md-svg-src="/public/assets/plus.svg"></md-icon>
-            </md-button>
-          </md-fab-trigger>
-          <md-fab-actions>
-            <md-button ng-click="ctrl.showModal($event, 'register')" aria-label="Register" class="md-fab md-mini">
-              <md-tooltip md-direction="left">Register for an account</md-tooltip>
-              <md-icon md-svg-src="/public/assets/account-plus.svg"></md-icon>
-            </md-button>
-            <md-button ng-click="ctrl.showModal($event, 'event')" aria-label="Create Event" class="md-fab md-mini">
-              <md-tooltip md-direction="left">Create an Event</md-tooltip>
-              <md-icon md-svg-src="/public/assets/plus.svg"></md-icon>
-            </md-button>
-            <md-button aria-label="Donate" class="md-fab md-mini">
-              <md-tooltip md-direction="left">Chip In</md-tooltip>
-              <md-icon md-svg-src="/public/assets/currency-usd.svg"></md-icon>
-            </md-button>
-            <md-button aria-label="Comment" class="md-fab md-mini">
-              <md-tooltip md-direction="left">Comment</md-tooltip>
-              <md-icon md-svg-src="/public/assets/comment-plus.svg"></md-icon>
-            </md-button>
-          </md-fab-actions>
-        </md-fab-speed-dial>
-      </div>
+      </md-grid-list>
     </div>
+
   </body>
 </html>

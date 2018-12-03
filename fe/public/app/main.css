@@ -1,13 +1,19 @@
 .creation-modal {
   min-width: 650px;
+  overflow: hidden;
+
 }
 
 .event-card {
-  min-width:400px;
+  min-width:600px;
 }
 
 .event-image {
   max-width:200px;
+}
+
+.tilegrid {
+  overflow: auto;
 }
 
 fieldset {
@@ -23,6 +29,10 @@ fieldset {
   max-height: 36px;
 }
 
+img {
+  border-radius:4px;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -32,3 +42,17 @@ html, body {
 body {
   position:relative;
 }
+
+.small-text {
+  font-size:10px;
+}
+
+.logo {
+  max-height:100px;
+  max-width:100px;
+  border-radius:4px;
+  margin:8px;
+  background: #FFF;
+  padding:5px;
+}
+

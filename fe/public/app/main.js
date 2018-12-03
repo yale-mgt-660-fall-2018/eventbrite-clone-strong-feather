@@ -64,6 +64,8 @@ Controllers.main = function($scope, $mdDialog, AJAXService) {
 };
 
 main.service('AJAXService', Services.AJAXyService);
+main.service('AnalyticsService', Services.AnalyticsService);
+
 main.controller('EventCardController', EventCardController);
 main.directive("eventCard", EventCardDirective);
 

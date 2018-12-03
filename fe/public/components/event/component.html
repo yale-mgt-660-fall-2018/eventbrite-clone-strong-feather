@@ -8,10 +8,6 @@
           <span flex>[[ ct.dtx.location ]]</span>
         </div>
         <div layout="row">
-          <md-icon style="max-width:30px" md-svg-src="public/assets/location.svg" flex></md-icon>
-          <span flex>[[ ct.dtx.imageURL ]]</span>
-        </div>
-        <div layout="row">
           <md-icon style="max-width:30px" md-svg-src="public/assets/time.svg" flex></md-icon>
           <span flex>[[ ct.dtx.date ]]</span>
         </div>
@@ -31,10 +27,28 @@
     <div><i>Attending:</i> <br />
       <span ng-repeat="guest in ct.dtx.attending">[[ guest ]]<span ng-if="!$last"> • </span></span>
     </div>
-  <md-card-actions layout="row" layout-align="end end" md-padding="4px">
-    <md-button>Donate</md-button>
+  <md-card-actions layout="row" layout-align="space-between center" md-padding="10px" style="margin-right: 4px;">
+    <div layout="column" layout-align="space-around center">
+      <div>
+        <md-button aria-label="Donate" class="md-fab md-mini" ng-click="ct.launchDonateModal($event)">
+          <md-tooltip md-direction="down">Please Give Generously</md-tooltip>
+          <md-icon md-svg-src="/public/assets/currency-usd.svg"></md-icon>
+        </md-button>
+      </div>
+      <div class="small-text">
+        <span ng-if="ct.donate_message == 'Donate'">Donate</span>
+        <span ng-if="ct.donate_message == 'Support'">Support</span>
+      </div>
+    </div>
+
+    <md-input-container md-padding class="md-block" flex>
+      <label>Email</label>
+      <input required type="email" ng-model="ct.email" class="md-block" ng-keyup="ct.checkEmail(ct.email)" ng-disabled="ct.bork_email"/>
+      <div class="small-text"><i>A valid yale.edu email address is required.</i></div>
+    </md-input-container>
+
     <md-menu>
-      <md-button class="md-primary md-raised" aria-label="RSVP" md-menu-origin ng-click="ct.openRSVPMenu($mdMenu, $event)">RSVP</md-button>
+      <md-button ng-disabled="! ct.EmailValid" class="md-primary md-raised" aria-label="RSVP" md-menu-origin ng-click="ct.openRSVPMenu($mdMenu, $event)">RSVP</md-button>
       <md-menu-content>
         <md-menu-item ng-repeat="choice in ct.RSVP_CHOICES">
           <md-button ng-click="ct.setRSVP(choice)">[[choice]]</md-button>
@@ -42,4 +56,5 @@
       </md-menu-content>
     </md-menu>
   </md-card-actions>
+
 </md-card>
