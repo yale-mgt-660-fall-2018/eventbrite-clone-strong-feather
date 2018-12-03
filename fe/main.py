@@ -6,7 +6,7 @@ import wsgiref.handlers
 import os
 import json
 from datetime import datetime
-
+from main_postgres import db_name, db_user, db_password, host
 
 def format_to_json(data_stream):
   # NB. Dates don't do well in Python JSON.
@@ -17,10 +17,10 @@ def get_data(parameter):
   return format_to_json(
     [
       {
-          'title': 'SOM House Party',
+          'title': 'SOM House Party2',
           'date': datetime(2018, 1, 17, 16, 30, 0),
           'imageURL': 'http://i.imgur.com/pXjrQ.gif',
-          'location': 'Kyle \'s house',
+          'location': 'Aaron \'s house',
           'attending': ['kyle.jensen@yale.edu', 'kim.kardashian@yale.edu'],
       },
       {
@@ -82,3 +82,45 @@ app = webapp.WSGIApplication(
   ],
   debug=os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/')
 )
+'''
+# Get all event details
+def getEventDetails():
+	events = executeQuery("SELECT * FROM events;") 
+	attendees = executeQuery("SELECT * from attendees WHERE eventid IN (SELECT eventid FROM events) AND status = \"Yes\"")
+
+# Create new event
+def createEvent(eventObject):
+	# Dummy object
+	eventObject = {
+            'eventname' : "Party at Race\'s",
+            'location' : '',
+            'eventtime' : "No courses to display at this time.",
+            'duration_mins' : '',
+            'imagelink' : ''
+            }
+	
+	
+INSERT INTO events (eventname, location, eventtime, duration_mins, imagelink) VALUES ('Party at Race''s', 'Races house', '2019-01-01 00:00:01', 120, 'https://i.imgur.com/n3PQl9u.png');
+
+# Delete an event
+DELETE FROM events WHERE eventid = :eventid, eventid = eventid
+
+# Add attendee to event
+INSERT INTO attendees (eventid, userid, status, registertime) 
+VALUES (420, "aaron.dsouza@yale.edu", "Yes", NOW())
+
+# Add donation to event
+INSERT INTO donations (eventid, userid, amount, timeofdonation) 
+VALUES (420, "aaron.dsouza@yale.edu", 10.00, NOW())
+
+def executeQuery(query):
+	cnx = psycopg2.connect(dbname=db_name, user=db_user,
+                           password=db_password, host=host)
+	with cnx.cursor() as cursor:
+        cursor.execute(query)
+        result = cursor.fetchall()
+    current_time = result[0][0]
+    cnx.commit()
+    cnx.close()
+    return result
+ '''
