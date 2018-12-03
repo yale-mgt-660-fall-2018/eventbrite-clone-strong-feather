@@ -9,6 +9,13 @@ threadsafe: true
 #CLOUD_SQL_DATABASE_NAME: eventbrite
 #CLOUD_SQL_CONNECTION_NAME: mgt660-strongfeather:northamerica-northeast1:mgt660-strongfeather
 
+env_variables:
+    # Replace user, password, database, and instance connection name with the values obtained
+    # when configuring your Cloud SQL instance.
+    SQLALCHEMY_DATABASE_URI: >-
+      postgresql+psycopg2://postgres:mgt660-strongfeather@/eventbrite?host=/cloudsql/mgt660-strongfeather:northamerica-northeast1:mgt660-strongfeather
+
+
 handlers:
 
 - url: /public
