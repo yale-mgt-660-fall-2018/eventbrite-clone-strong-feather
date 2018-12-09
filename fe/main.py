@@ -7,6 +7,7 @@ import os
 import json
 from datetime import datetime
 
+
 #db_user = os.environ.get('CLOUD_SQL_USERNAME')
 #db_password = os.environ.get('CLOUD_SQL_PASSWORD')
 #db_name = os.environ.get('CLOUD_SQL_DATABASE_NAME')
@@ -15,7 +16,7 @@ from datetime import datetime
 #cnx = psycopg2.connect(dbname=db_name, user=db_user,
 #                       password=db_password, host=host)
 
-from main_postgres import db_name, db_user, db_password, host
+
 
 def format_to_json(data_stream):
   # NB. Dates don't do well in Python JSON.
@@ -67,13 +68,27 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 
-class MainPageHandler(webapp.RequestHandler):
-  def get(self):
+class AboutPageHandler(webapp.RequestHandler):
+  def get(self, *args):
 
-    print self.request
+    template_values = {'title': 'Strong Feather Team'}
+    template = JINJA_ENVIRONMENT.get_template('about.html')
+
+    self.response.write(template.render(template_values))
+
+class MainPageHandler(webapp.RequestHandler):
+  def get(self, *args):
 
     template_values = {'title': 'Strong Feather Events'}
     template = JINJA_ENVIRONMENT.get_template('index.html')
+
+    self.response.write(template.render(template_values))
+
+class CreatePageHandler(webapp.RequestHandler):
+  def get(self):
+
+    template_values = {'title': 'Strong Feather Events'}
+    template = JINJA_ENVIRONMENT.get_template('create.html')
 
     self.response.write(template.render(template_values))
 
@@ -95,15 +110,35 @@ class DonationAPIHandler(webapp.RequestHandler):
     data = payload.body
     print data
 
+
+routes = [
+  webapp.Route(r'/', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/about', handler=AboutPageHandler, name="about"),
+  webapp.Route(r'/events/new', handler=CreatePageHandler, name="home"),
+  webapp.Route(r'/events/0', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/1', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/2', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/3', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/4', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/5', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/6', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/7', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/8', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/9', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/10', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/api/events', handler=EventAPIHandler, name="apievents"),
+  webapp.Route(r'/api/donations', handler=DonationAPIHandler, name="apidonations")
+]
+
 app = webapp.WSGIApplication(
-  # List of tuples mapping routes to class handlers.
-  [
-    ('/', MainPageHandler),
-    ('/api/events', EventAPIHandler),
-    ('/api/donations', DonationAPIHandler)
-  ],
+  routes,
   debug=os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/')
 )
+
+
+
 '''
 # Get all event details
 def getEventDetails():

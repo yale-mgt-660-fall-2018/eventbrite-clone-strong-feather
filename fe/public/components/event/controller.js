@@ -17,7 +17,14 @@ function EventCardController($mdDialog, $mdToast, $scope,
   ctrl.openRSVPMenu = function($mdMenu, ev) {$mdMenu.open(ev);};
 
 
-  ctrl.launchDonateModal = function(ev) {
+  ctrl.launchDonateModal = function(ev, msg) {
+
+      AnalyticsService.track({
+        hitType: 'event',
+        eventCategory: 'Events',
+        eventAction: 'Donation',
+        eventLabel: msg,
+      });
 
     var template = '../public/components/event/donate.html';
 
@@ -50,15 +57,12 @@ function EventCardController($mdDialog, $mdToast, $scope,
       $scope.buttonDisabled = !($scope.validEmail && $scope.donation > 0.0);
     };
 
-
-
-
-    $scope.donate= function() {
+    $scope.donate = function() {
 
       var promise = AJAXService.post('/api/donations', {
-          'amount': $scope.donation,
-          'event': ctrl.dtx.id,
-          'email': $scope.email,
+        'amount': $scope.donation,
+        'event': ctrl.dtx.id,
+        'email': $scope.email,
       });
 
       promise.then(function(response) {
@@ -96,6 +100,7 @@ function EventCardController($mdDialog, $mdToast, $scope,
 
   ctrl.setRSVP = function(option) {
 
+
     ctrl.RSVP = option;
 
     if (!ctrl.EmailValid) {
@@ -124,6 +129,9 @@ function EventCardController($mdDialog, $mdToast, $scope,
     }, function(error){
       ctrl.showToast("Something went wrong. Please try again later.");
     });
+
+
+
   };
 
 
@@ -135,7 +143,8 @@ function EventCardDirective() {
     scope:{},
     controller: 'EventCardController as ct',
     bindToController: {
-      dtx: "=dtx"
+      dtx: "=dtx",
+      msg: "=msg",
     },
     restrict: 'E', // make a custom element.
     templateUrl: '../public/components/event/component.html'

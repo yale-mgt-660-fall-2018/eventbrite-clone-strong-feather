@@ -1,7 +1,7 @@
 <html>
   <head>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <title>Strong Feather Events</title>
+    <title>Strong Feather Events: Create Event</title>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -10,14 +10,6 @@
 
       ga('create', 'UA-130211160-1', 'auto');
       ga('send', 'pageview');
-    </script>
-
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-130211160-1');
     </script>
 
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
@@ -44,29 +36,21 @@
   </head>
   <header>
     <md-toolbar class="md-tall">
-      <div layout="row" layout-align="begin end">
+      <div layout="row">
         <img src="/public/assets/feather.png" class="logo" id="logo" />
-        <h2>Strong Feather Events</h2>
+
       </div>
 
     </md-toolbar>
 
   </header>
 
-  <body ng-app="EventApp" ng-controller="MainCtrl as ctrl" ng-cloak>
-    <div ng-view></div>
+  <body ng-app="EventApp" ng-controller="MainCtrl as ctrl" ng-cloak ng-init="ctrl.showModal($event, 'event')">
 
-    <!--TODO: racewright. Make grid responsive. -->
-    <div class="tilegrid">
-      <md-grid-list md-cols="1" md-cols-gt-md="2" md-cols-gt-lg="3" md-row-height="1:1" md-gutter="12px">
-        <md-grid-tile ng-repeat="event in ctrl.events track by $index">
-          <event-card dtx="event" msg="ctrl.messaging" id="event_[[ $index ]]"></event-card>
-        </md-grid-tile>
-      </md-grid-list>
-    </div>
+
 
   </body>
   <footer>
-    <a href="/about">About</a>
+
   </footer>
 </html>

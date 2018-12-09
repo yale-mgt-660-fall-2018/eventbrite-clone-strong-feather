@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import flask
 import psycopg2
 
 db_user = os.environ.get('CLOUD_SQL_USERNAME')
