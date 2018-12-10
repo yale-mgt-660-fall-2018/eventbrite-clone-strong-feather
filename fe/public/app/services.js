@@ -18,7 +18,7 @@ Services.AnalyticsService = function($location) {
     if (this.is_dev) {
       console.log("Tracking Event :" + JSON.stringify(event));
     };
-    window.ga('send', event);
+    ga('send', event);
   };
 
 

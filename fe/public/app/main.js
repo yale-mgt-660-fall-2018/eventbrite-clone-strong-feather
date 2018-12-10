@@ -9,13 +9,34 @@ main.config(['$interpolateProvider', function($interpolateProvider) {
   $interpolateProvider.endSymbol(']]');
 }]);
 
-Controllers.main = function($scope, $mdDialog, AJAXService) {
+
+Controllers.main = function($scope, $mdDialog, $window, AJAXService) {
+
   var ctrl = this;
+
+  ctrl.messaging = (Math.random() < 0.5) ? 'Donate' : 'Support';
 
   var promise = AJAXService.get('/api/events', {});
   promise.then(function(response){
-    console.log(response['data']);
-    ctrl.events = response['data'];
+
+    let events = response['data'];
+    console.log(events);
+
+    let path = window.location.pathname;
+
+    if (path == '/events/' || path == '/events' || path == '/' || path == '') {
+      ctrl.events = events;
+      return;
+    }
+    let re = new RegExp('[0-9]');
+
+    if(re.test(path)) {
+      let id = re.exec(path);
+      ctrl.events = events.filter(function(el) {
+        return el['id'] == id;
+      });
+    }
+
   }, function(error) {
     // Add Error Toast.
     console.log(error);
@@ -41,6 +62,7 @@ Controllers.main = function($scope, $mdDialog, AJAXService) {
     };
 
     $mdDialog.show(payload).then(function(answer) {
+      $window.location.href = '/events';
 
     }, function(error) {
 

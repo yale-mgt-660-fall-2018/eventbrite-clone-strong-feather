@@ -33,7 +33,6 @@ def connect_to_cloudsql():
         db = MySQLdb.connect(host='127.0.0.1', user='', passwd='', db='msqldb')
     return db
 
-
 def executeQuery(query):
 	db = connect_to_cloudsql()
 	try:
@@ -47,7 +46,6 @@ def executeQuery(query):
 		global error_message 
 		error_message = sys.exc_info()
 	return ""
-
 
 def format_to_json(data_stream):
   # NB. Dates don't do well in Python JSON.
@@ -63,8 +61,16 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 
+class AboutPageHandler(webapp.RequestHandler):
+  def get(self, *args):
+
+    template_values = {'title': 'Strong Feather Team'}
+    template = JINJA_ENVIRONMENT.get_template('about.html')
+   
+    self.response.write(template.render(template_values))
+
 class MainPageHandler(webapp.RequestHandler):
-  def get(self):
+  def get(self, *args):
 
     print self.request
     # TODO remove before submission. 5 lines of Aarons Testing code. Replace value of errormessage in template_values to ''
@@ -76,6 +82,15 @@ class MainPageHandler(webapp.RequestHandler):
 
     template_values = {'title': 'Strong Feather Events', 'errormessage': ''}
     template = JINJA_ENVIRONMENT.get_template('index.html')
+
+    self.response.write(template.render(template_values))
+
+
+class CreatePageHandler(webapp.RequestHandler):
+  def get(self):
+
+    template_values = {'title': 'Strong Feather Events'}
+    template = JINJA_ENVIRONMENT.get_template('create.html')
 
     self.response.write(template.render(template_values))
 
@@ -97,19 +112,36 @@ class DonationAPIHandler(webapp.RequestHandler):
     data = payload.body
     print data
 
+
+routes = [
+  webapp.Route(r'/', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/about', handler=AboutPageHandler, name="about"),
+  webapp.Route(r'/events/new', handler=CreatePageHandler, name="home"),
+  webapp.Route(r'/events/0', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/1', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/2', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/3', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/4', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/5', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/6', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/7', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/8', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/9', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/10', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events/', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/events', handler=MainPageHandler, name="home"),
+  webapp.Route(r'/api/events', handler=EventAPIHandler, name="apievents"),
+  webapp.Route(r'/api/donations', handler=DonationAPIHandler, name="apidonations")
+]
+
 app = webapp.WSGIApplication(
-  # List of tuples mapping routes to class handlers.
-  [
-    ('/', MainPageHandler),
-    ('/api/events', EventAPIHandler),
-    ('/api/donations', DonationAPIHandler)
-  ],
+  routes,
   debug=os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/')
 )
 
+
 # Get all event details
 def getEventDetails():
-	#global allevents
 	allevents = executeQuery("SELECT eventid, eventname, eventtime, imagelink, location, duration FROM events;") 
 	attendees = executeQuery("SELECT eventid, useremail from attendees WHERE eventid IN (SELECT eventid FROM events) AND status = \"Yes\";")
 	#allevents = executeQuery("SELECT e.*, (SELECT GROUP_CONCAT(a.useremail SEPARATOR ', ') FROM attendees a WHERE a.eventid = e.eventid) AS attending FROM events e;")
@@ -149,7 +181,8 @@ def createEvent(eventObject):
 # Delete an event by eventid
 def deleteEvent(eventid):
 	#TODO Aaron Remove hardcode
-	eventid = 60
+	if eventid is None:
+		eventid = 60
 	return executeQuery("DELETE FROM events WHERE eventid = " + str(eventid) + ";")
 
 # Add attendee to event
@@ -165,7 +198,7 @@ def addAttendee(attendeeObject):
 	response = executeQuery("INSERT INTO attendees (eventid, useremail, status, registertime) VALUES (" + str(attendeeObject['eventid']) + ", \'" + attendeeObject['useremail'] + "\', \'" + attendeeObject['status'] + "\', \'" + str(datetime.now()) + "\');")
 	return response
 	
-# TODO Aaron
+
 # Add donation to event
 def addDonation(donationObject):
 	# @Race: This is the object format.
@@ -178,5 +211,4 @@ def addDonation(donationObject):
 	# End of hardcode
 	response = executeQuery("INSERT INTO donations (eventid, useremail, amount) VALUES (" + str(donationObject['eventid']) + ", \'" + donationObject['useremail'] + "\', " + str(donationObject['amount']) + ");")
 	return response
-	#INSERT INTO donations (eventid, userid, amount, timeofdonation) 
-	#VALUES (420, "aaron.dsouza@yale.edu", 10.00, NOW())
+

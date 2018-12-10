@@ -1,7 +1,14 @@
 .creation-modal {
   min-width: 650px;
   overflow: hidden;
+}
 
+.headshot {
+  max-width: 300px;
+}
+
+.dev-card {
+  max-width: 450px;
 }
 
 .event-card {
@@ -13,7 +20,7 @@
 }
 
 .tilegrid {
-  overflow: auto;
+  overflow: visible;
 }
 
 fieldset {

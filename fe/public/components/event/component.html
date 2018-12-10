@@ -4,18 +4,18 @@
       <span class="md-headline">[[ ct.dtx.title ]]</span>
       <div layout="column">
         <div layout="row">
-          <md-icon style="max-width:30px" md-svg-src="public/assets/location.svg" flex></md-icon>
+          <md-icon style="max-width:30px" md-svg-src="/public/assets/location.svg" flex></md-icon>
           <span flex>[[ ct.dtx.location ]]</span>
         </div>
         <div layout="row">
-          <md-icon style="max-width:30px" md-svg-src="public/assets/time.svg" flex></md-icon>
+          <md-icon style="max-width:30px" md-svg-src="/public/assets/time.svg" flex></md-icon>
           <span flex>[[ ct.dtx.date ]]</span>
         </div>
       </div>
     </md-card-title-text>
     <md-card-title-media>
       <img ng-if="ct.dtx.imageURL" ng-src="[[ ct.dtx.imageURL ]]" class="event-image">
-      <img ng-if="!ct.dtx.imageURL" src="./public/assets/default-party.jpg" class="event-image">
+      <img ng-if="!ct.dtx.imageURL" src="/public/assets/default-party.jpg" class="event-image">
     </md-card-title-media>
   </md-card-title>
   <md-card-content layout="column">
@@ -30,14 +30,13 @@
   <md-card-actions layout="row" layout-align="space-between center" md-padding="10px" style="margin-right: 4px;">
     <div layout="column" layout-align="space-around center">
       <div>
-        <md-button aria-label="Donate" class="md-fab md-mini" ng-click="ct.launchDonateModal($event)">
+        <md-button aria-label="Donate" class="md-fab md-mini" ng-click="ct.launchDonateModal($event, ct.msg)">
           <md-tooltip md-direction="down">Please Give Generously</md-tooltip>
           <md-icon md-svg-src="/public/assets/currency-usd.svg"></md-icon>
         </md-button>
       </div>
       <div class="small-text">
-        <span ng-if="ct.donate_message == 'Donate'">Donate</span>
-        <span ng-if="ct.donate_message == 'Support'">Support</span>
+        <span>[[ ct.msg ]]</span>
       </div>
     </div>
 
