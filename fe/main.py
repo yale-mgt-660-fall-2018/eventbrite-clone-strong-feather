@@ -212,3 +212,7 @@ def addDonation(donationObject):
 	response = executeQuery("INSERT INTO donations (eventid, useremail, amount) VALUES (" + str(donationObject['eventid']) + ", \'" + donationObject['useremail'] + "\', " + str(donationObject['amount']) + ");")
 	return response
 
+# DB queries to insert data into tables:
+# INSERT INTO events (eventname, location, eventtime, duration, imagelink) VALUES ('Party at Aarons', 'Races house', '2019-01-01 00:00:01', '120', 'https://i.imgur.com/n3PQl9u.png');
+# INSERT INTO attendees (eventid, useremail, status, registertime) VALUES (60, 'aaron.dsouza@yale.edu', 'Yes', '2018-12-09 22:36:16.478049');
+# INSERT INTO donations (eventid, useremail, amount) VALUES (60, 'aaron.dsouza@yale.edu', 10.1);
