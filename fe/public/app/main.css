@@ -20,7 +20,7 @@
 }
 
 .tilegrid {
-  overflow: visible;
+  overflow: auto;
 }
 
 fieldset {
@@ -40,11 +40,16 @@ img {
   border-radius:4px;
 }
 
+a, a:hover {
+  text-decoration: none;
+}
+
+
 html, body {
   margin: 0;
   padding: 0;
   background-color: #e91e63;
-  overflow:hidden;
+  overflow:visible;
 }
 body {
   position:relative;
@@ -63,3 +68,11 @@ body {
   padding:5px;
 }
 
+.footer {
+  position: fixed;
+  background-color: #FFF;
+  left: 0px;
+  right: 0px;
+  height: 40px;
+
+}

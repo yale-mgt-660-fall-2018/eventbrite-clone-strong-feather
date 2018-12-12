@@ -1,49 +1,13 @@
 <html>
   <head>
     <title>Strong Feather Team</title>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-      ga('create', 'UA-130211160-1', 'auto');
-      ga('send', 'pageview');
-    </script>
+    {% include 'scripts.html' %}
 
-    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/public/app/main.css">
-    <!-- Angular Libraries -->
-    <link async rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular-animate.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular-aria.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular-messages.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular-route.js""></script>
-
-
-
-    <!-- Angular Material-->
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.10/angular-material.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.10/angular-material.min.js"></script>
-
-    <script src="/public/components/event/controller.js"></script>
-
-    <script src="/public/components/register/controller.js"></script>
     <script src="/public/app/services.js"></script>
     <script src="/public/app/about.js"></script>
   </head>
-  <header>
-    <md-toolbar class="md-tall">
-      <div layout="row">
-        <img src="/public/assets/feather.png" class="logo" id="logo" />
-
-      </div>
-
-    </md-toolbar>
-
-  </header>
+  {% include 'header.html' %}
 
   <body ng-app="EventApp" ng-controller="MainCtrl as ctrl" ng-cloak>
 
@@ -51,20 +15,19 @@
       <md-grid-tile ng-repeat="dev in ctrl.devs">
         <md-card class="dev-card">
           <md-card-title>
-            <md-card-title-text>[[ dev.name ]]</md-card-title-text>
+            <md-card-title-text style="margin: 4px;"><h2>[[ dev.name ]]</h2></md-card-title-text>
+            <span flex></span>
             <md-card-title-media class="md-media-xl card-media headshot"><img ng-src="[[ dev.headshot]]" class="headshot" /></md-card-title-media>
           </md-card-title>
 
           <md-card-actions layout="row">
-            <md-button>LinkedIn</md-button>
-            <md-button>Give Kudos</md-button>
+            <md-button><a href="[[ dev.linkedIn ]]">LinkedIn</a></md-button>
+            <md-button ng-click="ctrl.showToast(dev.name)">Give Kudos</md-button>
           </md-card-actions>
         </md-card>
       </md-grid-tile>
     </md-grid-list>
 
   </body>
-  <footer>
-
-  </footer>
+  {% include 'footer.html' %}
 </html>

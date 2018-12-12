@@ -1,36 +1,37 @@
 /*globals angular */
 /*eslint-disable no-unused-params */
-var main = angular.module('EventApp', ['ngMaterial', 'ngMessages']);
+var about = angular.module('EventApp', ['ngMaterial', 'ngMessages']);
 var Controllers = Controllers || {};
 
 // change angular expressions to avoid collisions with jinja templates.
-main.config(['$interpolateProvider', function($interpolateProvider) {
+about.config(['$interpolateProvider', function($interpolateProvider) {
   $interpolateProvider.startSymbol('[[');
   $interpolateProvider.endSymbol(']]');
 }]);
 
 
-Controllers.main = function($scope, $mdDialog, AJAXService) {
+Controllers.main = function($scope, $mdToast) {
 
   var ctrl = this;
 
   ctrl.devs = [
-    {'name': 'Ashish', 'headshot': '/public/headshots/ashish.jpg'},
-    {'name': 'Aaron', 'headshot': '/public/headshots/aaron.jpg'},
-    {'name': 'Ifeanyi', 'headshot': '/public/headshots/ifeanyi.jpg'},
-    {'name': 'Race', 'headshot': '/public/headshots/race.jpg'},
+    {'name': 'Ashish', 'headshot': '/public/headshots/ashish.jpg', 'linkedIn': 'https://www.linkedin.com/in/ashishsrathi/'},
+    {'name': 'Aaron', 'headshot': '/public/headshots/aaron.jpg', 'linkedIn': 'https://www.linkedin.com/in/aaronsdsouza/'},
+    {'name': 'Ifeanyi', 'headshot': '/public/headshots/ifeanyi.jpg', 'linkedIn': 'https://www.linkedin.com/in/iokafor/'},
+    {'name': 'Race', 'headshot': '/public/headshots/race.jpg', 'linkedIn': 'https://www.linkedin.com/in/racewright/'},
 
-  ]
+  ];
+
+  ctrl.showToast = function(person) {
+
+    var hide = hide || 5000;
+    $mdToast.show(
+        $mdToast.simple()
+          .textContent(person + ' says: thank you!')
+          .hideDelay(hide)
+      );
+  }
 
 };
 
-main.service('AJAXService', Services.AJAXyService);
-main.service('AnalyticsService', Services.AnalyticsService);
-
-main.controller('EventCardController', EventCardController);
-main.directive("eventCard", EventCardDirective);
-
-main.controller('RegisterCardController', RegisterCardController);
-main.directive("registerCard", RegisterCardDirective);
-
-main.controller('MainCtrl', Controllers.main);
+about.controller('MainCtrl', Controllers.main);

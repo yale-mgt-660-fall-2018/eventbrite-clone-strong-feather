@@ -17,20 +17,18 @@ CLOUDSQL_PASSWORD = os.environ.get('CLOUDSQL_PASSWORD')
 CLOUDSQL_DATABASE_NAME = os.environ.get('CLOUDSQL_DATABASE_NAME')
 
 def connect_to_cloudsql():
-    if True:
-		try:
-			cloudsql_unix_socket = os.path.join('/cloudsql', CLOUDSQL_CONNECTION_NAME)
-			db = MySQLdb.connect(
-	            unix_socket=cloudsql_unix_socket,
-	            user=CLOUDSQL_USER,
-	            passwd=CLOUDSQL_PASSWORD,
-	            db=CLOUDSQL_DATABASE_NAME)
-	            
-		except Exception as e:
-			global error_message 
-			error_message = sys.exc_info()
-    else:
-        db = MySQLdb.connect(host='127.0.0.1', user='', passwd='', db='msqldb')
+  try:
+    cloudsql_unix_socket = os.path.join('/cloudsql', CLOUDSQL_CONNECTION_NAME)
+    db = MySQLdb.connect(
+            unix_socket=cloudsql_unix_socket,
+            user=CLOUDSQL_USER,
+            passwd=CLOUDSQL_PASSWORD,
+            db=CLOUDSQL_DATABASE_NAME)
+    return db
+  except Exception as e:
+    global error_message
+    error_message = sys.exc_info()
+    db = MySQLdb.connect(host='127.0.0.1', user='', passwd='', db='msqldb')
     return db
 
 def executeQuery(query):
@@ -39,11 +37,11 @@ def executeQuery(query):
 		cursor = db.cursor()
 		cursor.execute(query)
 		db.commit()
-		global response 
+		global response
 		response = cursor.fetchall()
-		return response 
+		return response
 	except Exception as e:
-		global error_message 
+		global error_message
 		error_message = sys.exc_info()
 	return ""
 
@@ -66,32 +64,19 @@ class AboutPageHandler(webapp.RequestHandler):
 
     template_values = {'title': 'Strong Feather Team'}
     template = JINJA_ENVIRONMENT.get_template('about.html')
-   
+
     self.response.write(template.render(template_values))
 
 class MainPageHandler(webapp.RequestHandler):
   def get(self, *args):
-
-    print self.request
-    # TODO remove before submission. 5 lines of Aarons Testing code. Replace value of errormessage in template_values to ''
-    #createEvent(None)
-    #deleteEvent(None)
-    #addAttendee(None)
-    #addDonation(None)
-    #eventDetails = getEventDetails()
-
     template_values = {'title': 'Strong Feather Events', 'errormessage': ''}
     template = JINJA_ENVIRONMENT.get_template('index.html')
-
     self.response.write(template.render(template_values))
-
 
 class CreatePageHandler(webapp.RequestHandler):
   def get(self):
-
     template_values = {'title': 'Strong Feather Events'}
     template = JINJA_ENVIRONMENT.get_template('create.html')
-
     self.response.write(template.render(template_values))
 
 class EventAPIHandler(webapp.RequestHandler):
@@ -142,7 +127,7 @@ app = webapp.WSGIApplication(
 
 # Get all event details
 def getEventDetails():
-	allevents = executeQuery("SELECT eventid, eventname, eventtime, imagelink, location, duration FROM events;") 
+	allevents = executeQuery("SELECT eventid, eventname, eventtime, imagelink, location, duration FROM events;")
 	attendees = executeQuery("SELECT eventid, useremail from attendees WHERE eventid IN (SELECT eventid FROM events) AND status = \"Yes\";")
 	#allevents = executeQuery("SELECT e.*, (SELECT GROUP_CONCAT(a.useremail SEPARATOR ', ') FROM attendees a WHERE a.eventid = e.eventid) AS attending FROM events e;")
 	eventsCopy = list()
@@ -177,7 +162,7 @@ def createEvent(eventObject):
 		newEvent['duration'] = ""
 	response = executeQuery("INSERT INTO events (eventname, location, eventtime, duration, imagelink) VALUES (\'" + eventObject["title"] + "\', \'" + eventObject["location"] + "\', \'" + eventObject["date"] + "\', \'" + str(eventObject["duration"]) + "\', \'" + eventObject["imageURL"] + "\');")
 	return response
-	
+
 # Delete an event by eventid
 def deleteEvent(eventid):
 	#TODO Aaron Remove hardcode
@@ -197,7 +182,7 @@ def addAttendee(attendeeObject):
 	# End of hardcode
 	response = executeQuery("INSERT INTO attendees (eventid, useremail, status, registertime) VALUES (" + str(attendeeObject['eventid']) + ", \'" + attendeeObject['useremail'] + "\', \'" + attendeeObject['status'] + "\', \'" + str(datetime.now()) + "\');")
 	return response
-	
+
 
 # Add donation to event
 def addDonation(donationObject):
