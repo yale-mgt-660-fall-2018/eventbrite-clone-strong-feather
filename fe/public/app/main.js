@@ -33,7 +33,7 @@ Controllers.main = function($scope, $mdDialog, $window, AJAXService) {
     if(re.test(path)) {
       let id = re.exec(path);
       ctrl.events = events.filter(function(el) {
-        return el['id'] == id;
+        return el['feid'] == id;
       });
     }
 

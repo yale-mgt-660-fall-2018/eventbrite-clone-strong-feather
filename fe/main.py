@@ -131,9 +131,10 @@ def getEventDetails():
 	attendees = executeQuery("SELECT eventid, useremail from attendees WHERE eventid IN (SELECT eventid FROM events) AND status = \"Yes\";")
 	#allevents = executeQuery("SELECT e.*, (SELECT GROUP_CONCAT(a.useremail SEPARATOR ', ') FROM attendees a WHERE a.eventid = e.eventid) AS attending FROM events e;")
 	eventsCopy = list()
-	for event in allevents:
+	for i, event in enumerate(allevents):
 		newEvent = {}
 		newEvent['id'] = event[0]
+		newEvent['feid'] = i
 		newEvent['title'] = event[1]
 		newEvent['date'] = event[2]
 		newEvent['imageURL'] = event[3]
