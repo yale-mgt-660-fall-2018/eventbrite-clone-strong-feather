@@ -107,9 +107,10 @@ function EventCardController($mdDialog, $mdToast, $scope,
       ctrl.showToast('Yale Students Only. Boola Boola!');
     }
 
-    var promise = AJAXService.post('/api/events', {
-      'RSVP': option,
+    var promise = AJAXService.post('/api/rsvp', {
+      'eventid': ctrl.dtx.id,
       'email': ctrl.email,
+      'status': ctrl.RSVP
     });
     promise.then(function(reponse) {
       if (ctrl.RSVP == 'Yes'){ctrl.showToast("Great! See you there.");}
@@ -127,6 +128,7 @@ function EventCardController($mdDialog, $mdToast, $scope,
       });
 
     }, function(error){
+      console.log(error);
       ctrl.showToast("Something went wrong. Please try again later.");
     });
 

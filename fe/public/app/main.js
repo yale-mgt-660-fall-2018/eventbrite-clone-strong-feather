@@ -9,12 +9,25 @@ main.config(['$interpolateProvider', function($interpolateProvider) {
   $interpolateProvider.endSymbol(']]');
 }]);
 
-
 Controllers.main = function($scope, $mdDialog, $window, AJAXService) {
 
   var ctrl = this;
 
   ctrl.messaging = (Math.random() < 0.5) ? 'Donate' : 'Support';
+
+  ctrl.postman = function() {
+    let p = AJAXService.post('/api/rsvp', {
+        'email': 'racewright@hbs.edu',
+        'eventid': 81,
+        'status': 'Yes'
+    });
+
+    p.then(function(response) {
+      console.log(response);
+    }, function(error) {
+      console.log(error);
+    });
+  }
 
   var promise = AJAXService.get('/api/events', {});
   promise.then(function(response){
@@ -81,6 +94,11 @@ Controllers.main = function($scope, $mdDialog, $window, AJAXService) {
     $scope.answer = function(answer) {
       $mdDialog.hide();
     };
+  }
+
+  ctrl.cardClick = function(event, index) {
+
+    console.log('thanks for clicking!');
   }
 
 };

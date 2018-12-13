@@ -8,8 +8,17 @@ import json
 import sys
 import MySQLdb
 from datetime import datetime
-#from flask import Flask
-#import psycopg2.pool
+import re
+
+
+def validate_email(candidate):
+
+  candidate = candidate.lower()
+
+  if not re.match("^[A-Za-z0-9._%+-]+@yale.edu", candidate):
+    return False
+
+  return True
 
 CLOUDSQL_CONNECTION_NAME = os.environ.get('CLOUDSQL_CONNECTION_NAME')
 CLOUDSQL_USER = os.environ.get('CLOUDSQL_USER')
@@ -86,6 +95,47 @@ class EventAPIHandler(webapp.RequestHandler):
   def post(self):
     payload = self.request
     data = payload.body
+    print data
+
+
+class RSVPHandler(webapp.RequestHandler):
+  def post(self):
+    req = self.request
+    print '---' * 4
+
+    payload = json.loads(req.body)
+
+
+    email = payload["email"]
+
+    if not validate_email(email):
+      self.response.set_status(500)
+      self.response.write('Email Was Not Valid. Please Try Again.')
+      return
+
+    s = 'Yes' if (payload['status'] == 'Yes') else 'No'
+
+    eventid = payload['eventid']
+
+    response = executeQuery("""
+  	   INSERT INTO attendees (eventid, useremail, status, registertime)
+  	   VALUES (%i, %s, %s, %s); "
+  	 """ % (eventid, email, status, str(datetime.now()))
+    )
+
+    if not response == '':
+      self.response.write('Success!')
+      self.response.set_status(200)
+      return
+
+    else:
+      self.response.write('Failure!')
+      self.response.set_status(500)
+
+    return response
+
+
+
 
 class DonationAPIHandler(webapp.RequestHandler):
   def get(self):
@@ -116,6 +166,7 @@ routes = [
   webapp.Route(r'/events/', handler=MainPageHandler, name="home"),
   webapp.Route(r'/events', handler=MainPageHandler, name="home"),
   webapp.Route(r'/api/events', handler=EventAPIHandler, name="apievents"),
+  webapp.Route(r'/api/rsvp', handler=RSVPHandler, name="apirsvp"),
   webapp.Route(r'/api/donations', handler=DonationAPIHandler, name="apidonations")
 ]
 
@@ -172,16 +223,14 @@ def deleteEvent(eventid):
 	return executeQuery("DELETE FROM events WHERE eventid = " + str(eventid) + ";")
 
 # Add attendee to event
-def addAttendee(attendeeObject):
-	# @Race: This is the object format.
-	# TODO Aaron remove hardcode
-	attendeeObject = {
-		'eventid' : 60,
-		'useremail' : "aaron.dsouza@yale.edu",
-		'status' : "Yes"
-		}
+def addAttendee(eventid, email, status):
 	# End of hardcode
-	response = executeQuery("INSERT INTO attendees (eventid, useremail, status, registertime) VALUES (" + str(attendeeObject['eventid']) + ", \'" + attendeeObject['useremail'] + "\', \'" + attendeeObject['status'] + "\', \'" + str(datetime.now()) + "\');")
+	response = executeQuery("""
+	 INSERT INTO attendees (eventid, useremail, status, registertime)
+	 VALUES (%i, %s, %s, %s); "
+	""" % (eventid, email, status, str(datetime.now()))
+  )
+
 	return response
 
 

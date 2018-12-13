@@ -21,7 +21,7 @@
     <div class="tilegrid">
       <md-grid-list md-cols="1" md-cols-gt-md="2" md-cols-gt-lg="3" md-row-height="1:1" md-gutter="12px">
         <md-grid-tile ng-repeat="event in ctrl.events track by $index">
-          <event-card dtx="event" msg="ctrl.messaging" id="event_[[ $index ]]"></event-card>
+          <event-card dtx="event" msg="ctrl.messaging" id="event_[[ $index ]]" ng-click="ctrl.cardClick($event, $index)"></event-card>
         </md-grid-tile>
       </md-grid-list>
     </div>
