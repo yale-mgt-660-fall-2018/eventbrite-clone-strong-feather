@@ -140,8 +140,6 @@ function EventCardController($mdDialog, $mdToast, $scope,
       ctrl.showToast(error);
     });
 
-
-
   };
 
 
