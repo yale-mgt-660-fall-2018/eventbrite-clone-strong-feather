@@ -17,16 +17,6 @@ def provide_email_hash(email):
   hsh = hashlib.sha256(input)
   return hsh.hexdigest()
 
-
-def validate_email(candidate):
-
-  candidate = candidate
-
-  if not re.match("^[A-Za-z0-9._%+-]+@yale.edu", candidate):
-    return False
-
-  return True
-
 CLOUDSQL_CONNECTION_NAME = os.environ.get('CLOUDSQL_CONNECTION_NAME')
 CLOUDSQL_USER = os.environ.get('CLOUDSQL_USER')
 CLOUDSQL_PASSWORD = os.environ.get('CLOUDSQL_PASSWORD')
@@ -105,58 +95,14 @@ class EventAPIHandler(webapp.RequestHandler):
     payload = json.loads(req.body)
 
     time = datetime.strptime(payload['time'], '%Y-%m-%dT%H:%M:%S.%f')
-
     date = datetime.strptime(payload['date'], '%Y-%m-%dT%H:%M:%S.%f')
 
-    start = date + time
+    response = executeQuery("""
+        INSERT INTO events (eventname, location, eventtime, duration, imagelink)
+        VALUES (%s, %s, %s, %s, %s)
+      """ % (payload['eventname'], payload['location'], date + time, duration, imagelink)
+    )
 
-
-    print time
-    print date
-    print start
-
-#    print payload
-#    print "\n" * 4
-#    eventname = payload['eventname']
-#
-#    if not (eventname and len(eventname) < 51):
-#      self.response.write('Invalid Event Title')
-#      self.response.set_status(500)
-#      return
-#
-#
-#    location = payload['location']
-#    if not (location and len(location) < 51):
-#      self.response.write('Invalid Location')
-#      self.response.set_status(500)
-#      return
-#
-#    imagelink = payload['imagelink']
-#    if not (imagelink and imagelink[-4:] in ('.png', '.gif', '.jpg') and
-#            re.match("^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$", imagelink)):
-#      self.response.write('Invalid Image Link')
-#      self.response.set_status(500)
-#      return
-#
-#
-#
-#
-#    duration = payload['duration']
-#
-#    response = executeQuery("""
-#        INSERT INTO events (eventname, location, eventtime, duration, imagelink)
-#        VALUES (%s, %s, %s, %s, %s)
-#      """ % (eventname, location, eventtime, duration, imagelink)
-#    )
-#
-#    if not response == '':
-#      self.response.write('Success!')
-#      self.response.set_status(200)
-#      return
-#    else:
-#      self.response.write('Failure!')
-#      self.response.set_status(500)
-#    return response
 
 
 class RSVPHandler(webapp.RequestHandler):

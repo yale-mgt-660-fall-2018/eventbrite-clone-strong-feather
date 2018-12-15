@@ -119,6 +119,12 @@ function EventCardController($mdDialog, $mdToast, $scope,
       else if(ctrl.RSVP == 'Interested'){ctrl.showToast("Step up. Commit.")}
       else {ctrl.showToast("Successfully RSVPed!");}
 
+      $mdToast.show(
+        $mdToast.simple()
+          .textContent(response)
+          .hideDelay(hide)
+      );
+
       ctrl.bork_email = true;
 
       AnalyticsService.track({
