@@ -96,7 +96,6 @@ Controllers.main = function($scope, $mdDialog, $window, AJAXService) {
       let stringy = $scope.createEventForm.image.$viewValue;
       if (stringy == undefined) {return false;}
 
-      if (re.exec(stringy) == null) { return false }
 
       let last4 = stringy.substring(stringy.length -4);
       console.log(last4);
