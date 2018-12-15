@@ -1,4 +1,4 @@
-<md-dialog aria-label="Create an Event" class="md-block creation-modal">
+<md-dialog aria-label="Create an Event" class="creation-modal">
 
     <md-toolbar>
       <div class="md-toolbar-tools">
@@ -10,18 +10,34 @@
       </div>
     </md-toolbar>
 
-    <md-input-container class="md-block" flex-gt-sm>
-      <label>Title</label>
-      <input ng-model="event.title">
-    </md-input-container>
-    <md-input-container class="md-block" flex-gt-sm>
-      <label>Location</label>
-      <input ng-model="event.location">
-    </md-input-container>
+    <form name="createEventForm">
+
+      <md-input-container class="md-block" flex-gt-sm>
+        <label>Title</label>
+        <input name="eventname" md-maxlength="50" ng-model="event.eventname" required>
+        <div ng-messages="createEventForm.eventname.$error">
+          <div ng-message="required" class="form-error">This is required.</div>
+          <div ng-message="md-maxlength" class="form-error">50 characters of fewer. It's a title, not a novel.</div>
+        </div>
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-sm>
+        <label>Location</label>
+        <input name="location" md-maxlength="50" ng-model="event.location" required>
+        <div ng-messages="createEventForm.location.$error">
+          <div ng-message="required" class="form-error">This is required.</div>
+          <div ng-message="md-maxlength" class="form-error">50 characters of fewer. It's a location, not a declaraction of war.</div>
+        </div>
+      </md-input-container>
 
     <md-input-container class="md-block" flex-gt-sm>
       <label>Image URL</label>
-      <input ng-model="event.imageURL">
+      <input name="image" ng-model="event.imagelink" ng-required="true" type="url">
+      <div ng-messages="createEventForm.image.$error">
+        <div ng-message="required" class="form-error">This is required.</div>
+        <div ng-message="invalid" class="form-error">A valid URL is required</div>
+      </div>
+        <div class="form-error" ng-if="createEventForm.image.$touched && !validPicture()">Not a valid picture url.</div>
+
     </md-input-container>
 
 
@@ -29,31 +45,26 @@
     <div layout="row" class="md-block">
 
       <md-input-container>
-        <label>Beginning</label>
-        <input ng-model="event.time_beginning">
+        <label>Time</label>
+        <input name="time" ng-model="event.time" type="time" ng-required="true">
       </md-input-container>
       <md-input-container>
-        <label>Ending</label>
-        <input ng-model="event.time_ending">
+        <label>Duration (minutes)</label>
+        <input name="duration" ng-model="event.duration" type="number" ng-required="true">
       </md-input-container>
-          <md-input-container>
+
+      <md-input-container>
         <label>Enter date</label>
-        <md-datepicker ng-model="event.date"></md-datepicker>
+        <md-datepicker name="date" ng-model="event.date" ng-required="true"></md-datepicker>
       </md-input-container>
     </div>
+  </form>
 
-  <fieldset>
-    <legend><i>preview</i></legend>
-    <div layout="row" layout-align="center center">
-
-      <event-card dtx="event"></event-card>
-    </div>
-  </fieldset>
 
   <md-dialog-actions layout="row">
     <span flex></span>
-    <md-button ng-click="answer('not useful')">Cancel</md-button>
-    <md-button ng-click="answer('useful')" class="md-primary">Create</md-button>
+    <md-button ng-click="cancel()">Cancel</md-button>
+    <md-button ng-disabled="!Ready()" ng-click="submit()" class="md-primary">Create</md-button>
   </md-dialog-actions>
 
 </md-dialog>

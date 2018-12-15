@@ -1,6 +1,6 @@
 .creation-modal {
   min-width: 650px;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .headshot {

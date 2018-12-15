@@ -17,12 +17,33 @@ Services.AnalyticsService = function($location) {
   this.track = function(event) {
     if (this.is_dev) {
       console.log("Tracking Event :" + JSON.stringify(event));
-    };
+    }
     ga('send', event);
   };
 
+};
 
 
+ValidPictureLinkDirective = function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, elm, attrs, ctrl) {
+      ctrl.$validators.picture = function(modelValue, viewValue) {
+        if (ctrl.$isEmpty(modelValue)) {
+          // consider empty models to be valid
+          return true;
+        }
 
+        last4 = viewValue.substr(viewValue.length - 4);
+        console.log(last4);
+        valids = ['.jpg', '.gif', '.png'];
+        if(valids.indexOf(last4) == -1) {
+          return false;
+        }
 
-}
+        return true;
+
+      };
+    }
+  };
+};

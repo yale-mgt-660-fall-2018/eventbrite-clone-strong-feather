@@ -112,6 +112,7 @@ function EventCardController($mdDialog, $mdToast, $scope,
       'email': ctrl.email,
       'status': ctrl.RSVP
     });
+
     promise.then(function(reponse) {
       if (ctrl.RSVP == 'Yes'){ctrl.showToast("Great! See you there.");}
       else if(ctrl.RSVP == 'No') {ctrl.showToast("Lame. Maybe next time!");}
@@ -130,6 +131,7 @@ function EventCardController($mdDialog, $mdToast, $scope,
     }, function(error){
       console.log(error);
       ctrl.showToast("Something went wrong. Please try again later.");
+      ctrl.showToast(error);
     });
 
 

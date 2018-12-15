@@ -10,10 +10,17 @@ import MySQLdb
 from datetime import datetime
 import re
 
+import hashlib
+
+def provide_email_hash(email):
+  input = email.lower() + '-strong-feather'
+  hsh = hashlib.sha256(input)
+  return hsh.hexdigest()
+
 
 def validate_email(candidate):
 
-  candidate = candidate.lower()
+  candidate = candidate
 
   if not re.match("^[A-Za-z0-9._%+-]+@yale.edu", candidate):
     return False
@@ -92,49 +99,100 @@ class EventAPIHandler(webapp.RequestHandler):
   def get(self):
     events = get_data('events')
     self.response.write(events)
+
   def post(self):
-    payload = self.request
-    data = payload.body
-    print data
+    req = self.request
+    payload = json.loads(req.body)
+
+    time = datetime.strptime(payload['time'], '%Y-%m-%dT%H:%M:%S.%f')
+
+    date = datetime.strptime(payload['date'], '%Y-%m-%dT%H:%M:%S.%f')
+
+    start = date + time
+
+
+    print time
+    print date
+    print start
+
+#    print payload
+#    print "\n" * 4
+#    eventname = payload['eventname']
+#
+#    if not (eventname and len(eventname) < 51):
+#      self.response.write('Invalid Event Title')
+#      self.response.set_status(500)
+#      return
+#
+#
+#    location = payload['location']
+#    if not (location and len(location) < 51):
+#      self.response.write('Invalid Location')
+#      self.response.set_status(500)
+#      return
+#
+#    imagelink = payload['imagelink']
+#    if not (imagelink and imagelink[-4:] in ('.png', '.gif', '.jpg') and
+#            re.match("^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$", imagelink)):
+#      self.response.write('Invalid Image Link')
+#      self.response.set_status(500)
+#      return
+#
+#
+#
+#
+#    duration = payload['duration']
+#
+#    response = executeQuery("""
+#        INSERT INTO events (eventname, location, eventtime, duration, imagelink)
+#        VALUES (%s, %s, %s, %s, %s)
+#      """ % (eventname, location, eventtime, duration, imagelink)
+#    )
+#
+#    if not response == '':
+#      self.response.write('Success!')
+#      self.response.set_status(200)
+#      return
+#    else:
+#      self.response.write('Failure!')
+#      self.response.set_status(500)
+#    return response
 
 
 class RSVPHandler(webapp.RequestHandler):
   def post(self):
     req = self.request
-    print '---' * 4
-
     payload = json.loads(req.body)
-
-
     email = payload["email"]
-
     if not validate_email(email):
-      self.response.set_status(500)
+      self.response.set_status(501)
       self.response.write('Email Was Not Valid. Please Try Again.')
       return
 
     s = 'Yes' if (payload['status'] == 'Yes') else 'No'
-
     eventid = payload['eventid']
 
+    if not (eventid):
+      self.response.write('Invalid Event Id!')
+      self.response.set_status(502)
+
+    now = datetime.now()
     response = executeQuery("""
   	   INSERT INTO attendees (eventid, useremail, status, registertime)
-  	   VALUES (%i, %s, %s, %s); "
-  	 """ % (eventid, email, status, str(datetime.now()))
+  	   VALUES (%s, %s, %s, %s); "
+  	 """ % (str(eventid), str(email), str(s), now.strftime("%Y-%m-%d %H:%M"))
     )
 
     if not response == '':
-      self.response.write('Success!')
+      self.response.write('Your confirmation code is: ' +
+                           provide_email_hash(email)[0:8]
+      )
       self.response.set_status(200)
       return
-
     else:
       self.response.write('Failure!')
-      self.response.set_status(500)
-
+      self.response.set_status(503)
     return response
-
-
 
 
 class DonationAPIHandler(webapp.RequestHandler):
@@ -199,21 +257,6 @@ def getEventDetails():
 				break
 	return eventsCopy
 
-# Create new event
-def createEvent(eventObject):
-	# TODO: Remove hardcode
-	# @Race: This is the object format
-	eventObject = {
-            'title' : "Party at Aarons",
-            'location' : "Races house",
-            'date' : "2019-01-01 00:00:01",
-            'duration' : 120,
-            'imageURL' : "https://i.imgur.com/n3PQl9u.png"
-            }
-	if "duration" not in eventObject:
-		newEvent['duration'] = ""
-	response = executeQuery("INSERT INTO events (eventname, location, eventtime, duration, imagelink) VALUES (\'" + eventObject["title"] + "\', \'" + eventObject["location"] + "\', \'" + eventObject["date"] + "\', \'" + str(eventObject["duration"]) + "\', \'" + eventObject["imageURL"] + "\');")
-	return response
 
 # Delete an event by eventid
 def deleteEvent(eventid):
@@ -221,17 +264,6 @@ def deleteEvent(eventid):
 	if eventid is None:
 		eventid = 60
 	return executeQuery("DELETE FROM events WHERE eventid = " + str(eventid) + ";")
-
-# Add attendee to event
-def addAttendee(eventid, email, status):
-	# End of hardcode
-	response = executeQuery("""
-	 INSERT INTO attendees (eventid, useremail, status, registertime)
-	 VALUES (%i, %s, %s, %s); "
-	""" % (eventid, email, status, str(datetime.now()))
-  )
-
-	return response
 
 
 # Add donation to event

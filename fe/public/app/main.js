@@ -1,4 +1,4 @@
-/*globals angular */
+/*globals angular EventCardController EventCardController EventCardController RegisterCardController*/
 /*eslint-disable no-unused-params */
 var main = angular.module('EventApp', ['ngMaterial', 'ngMessages']);
 var Controllers = Controllers || {};
@@ -17,8 +17,8 @@ Controllers.main = function($scope, $mdDialog, $window, AJAXService) {
 
   ctrl.postman = function() {
     let p = AJAXService.post('/api/rsvp', {
-        'email': 'racewright@hbs.edu',
-        'eventid': 81,
+        'email': 'racewright@yale.edu',
+        'eventid': '123',
         'status': 'Yes'
     });
 
@@ -27,7 +27,7 @@ Controllers.main = function($scope, $mdDialog, $window, AJAXService) {
     }, function(error) {
       console.log(error);
     });
-  }
+  };
 
   var promise = AJAXService.get('/api/events', {});
   promise.then(function(response){
@@ -59,10 +59,10 @@ Controllers.main = function($scope, $mdDialog, $window, AJAXService) {
 
     var template = '';
     if(flag == 'event') {
-      var template = '../public/components/event/create.html';
+      template = '../public/components/event/create.html';
     };
     if(flag == 'register') {
-      var template = '../public/components/register/component.html';
+      template = '../public/components/register/component.html';
     };
 
     var payload = {
@@ -91,15 +91,52 @@ Controllers.main = function($scope, $mdDialog, $window, AJAXService) {
       $mdDialog.cancel();
     };
 
-    $scope.answer = function(answer) {
+    $scope.validPicture = function() {
+
+      let stringy = $scope.createEventForm.image.$viewValue;
+      if (stringy == undefined) {return false;}
+
+      if (re.exec(stringy) == null) { return false }
+
+      let last4 = stringy.substring(stringy.length -4);
+      console.log(last4);
+      let valids = ['.jpg', '.gif', '.png'];
+
+      return valids.indexOf(last4) > -1;
+    };
+
+    $scope.Ready = function() {
+      return $scope.validPicture() &&
+             createEventForm.eventname.$valid &&
+             createEventForm.location.$valid &&
+             createEventForm.location.$valid &&
+             createEventForm.image.$valid &&
+             createEventForm.time.$valid &&
+             createEventForm.duration.$valid &&
+             createEventForm.date.$valid;
+    }
+
+    $scope.submit = function() {
+
+      let q = AJAXService.post('/api/events', $scope.event);
+      console.log($scope.event);
+      q.then(function(response){
+        console.log(response);
+      }, function(error){
+        console.log(error);
+      });
+
+
       $mdDialog.hide();
+
+      window.location.href = "/";
     };
   }
 
   ctrl.cardClick = function(event, index) {
 
     console.log('thanks for clicking!');
-  }
+  };
 
 };
 
@@ -111,5 +148,6 @@ main.directive("eventCard", EventCardDirective);
 
 main.controller('RegisterCardController', RegisterCardController);
 main.directive("registerCard", RegisterCardDirective);
+main.directive("picture", ValidPictureLinkDirective);
 
 main.controller('MainCtrl', Controllers.main);
