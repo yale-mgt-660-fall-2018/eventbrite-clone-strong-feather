@@ -109,6 +109,14 @@ class RSVPHandler(webapp.RequestHandler):
   def post(self):
     req = self.request
     payload = json.loads(req.body)
+
+    if not response == '':
+      self.response.write('Your confirmation code is: ' +
+                           provide_email_hash(email)[0:8]
+      )
+      self.response.set_status(200)
+
+
     email = payload["email"]
     if not validate_email(email):
       self.response.set_status(501)
@@ -129,12 +137,7 @@ class RSVPHandler(webapp.RequestHandler):
   	 """ % (str(eventid), str(email), str(s), now.strftime("%Y-%m-%d %H:%M"))
     )
 
-    if not response == '':
-      self.response.write('Your confirmation code is: ' +
-                           provide_email_hash(email)[0:8]
-      )
-      self.response.set_status(200)
-      return
+
     else:
       self.response.write('Failure!')
       self.response.set_status(503)
